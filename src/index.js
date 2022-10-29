@@ -6,7 +6,7 @@ import { HashRouter } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <HashRouter base="/">
+  <HashRouter base="/bangkit-app">
     <ChakraProvider>
       <App />
     </ChakraProvider>
