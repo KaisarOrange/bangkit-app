@@ -21,7 +21,7 @@ import Daftar from "./Components/Register/Daftar";
 
 function App() {
   return (
-    <Router basename="/bangkit-app">
+    <Router>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
