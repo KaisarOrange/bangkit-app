@@ -7,7 +7,7 @@ import {
   Text,
   useRadio,
 } from "@chakra-ui/react";
-import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Link, Route, Routes } from "react-router-dom";
 import Login from "./Components/Login";
 import Home from "./Components/Home";
 import { useContext, useState } from "react";
