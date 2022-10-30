@@ -59,7 +59,7 @@ function Main() {
   return (
     <Box pt={100} pb={10}>
       <Navbar name={name} image={image} />
-      <Outlet context={[umkm]} />
+      <Outlet context={{ umkm: [umkm], fetchUMKM: [fetchUMKM] }} />
     </Box>
   );
 }

@@ -20,24 +20,23 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase-config";
 
 function Checkout(props) {
-  const { umkm, id } = props;
+  const { umkm, id, fetchUMKM, fetchUser } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const [invest, setInvest] = useState(0);
 
   const checkOut = async (event) => {
     event.preventDefault();
-    console.log(umkm.dana);
-    const num = invest;
     const userDoc = doc(db, "umkm", id);
     const newField = { danaRecieved: umkm.danaRecieved + invest };
-    console.log(typeof num);
+
     await updateDoc(userDoc, newField);
+    fetchUMKM();
   };
 
   return (
     <>
-      <Button mt={4} onClick={onOpen}>
+      <Button bg="#14BBC6" mt={4} onClick={onOpen}>
         Invest
       </Button>
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
@@ -63,7 +62,7 @@ function Checkout(props) {
 
             <ModalFooter>
               <Button type="submit" colorScheme="blue" mr={3} onClick={onClose}>
-                Close
+                Invest
               </Button>
               <Button variant="ghost">Secondary Action</Button>
             </ModalFooter>

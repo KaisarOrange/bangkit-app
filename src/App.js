@@ -10,12 +10,10 @@ import {
 import { HashRouter as Router, Link, Route, Routes } from "react-router-dom";
 import Login from "./Components/Login";
 import Home from "./Components/Home";
-import { useContext, useState } from "react";
 import Main from "./Components/Main/Main";
 import AddUmkm from "./Components/AddUmkm";
 import About from "./Components/Main/About";
 import Checkout from "./Components/Main/Checkout";
-import Navbar from "./Components/Main/Navbar";
 import Card from "./Components/Main/Card";
 import Daftar from "./Components/Register/Daftar";
 

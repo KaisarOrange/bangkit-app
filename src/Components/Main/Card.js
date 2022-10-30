@@ -10,11 +10,13 @@ import Cardd from "../../styles/Card.css";
 function Card(props) {
   let navigate = useNavigate();
 
-  const [umkm] = useOutletContext();
+  const {
+    umkm: [umkm],
+    fetchUMKM: [fetchUMKM],
+  } = useOutletContext();
   //const { umkm, image } = props;
   const convert = (n) => {
     const a = parseInt(n);
-    console.log(a);
     return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
   return (
@@ -32,7 +34,11 @@ function Card(props) {
         return (
           <div key={uniqid()}>
             <Box
-              onClick={() => navigate(`/main/${element.id}`)}
+              onClick={() =>
+                navigate(`/main/${element.id}`, {
+                  state: { umkm: [umkm], fetchUMKM: fetchUMKM },
+                })
+              }
               className="Card"
               h={450}
               display="flex"
