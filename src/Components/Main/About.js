@@ -97,10 +97,7 @@ function About() {
         <Text>Dana terkumpul</Text>
         <Text fontWeight="semibold">Rp {convert(umkm.danaRecieved)}</Text>
 
-        <Checkout
-          umkm={umkm}
-          id={id} /*fetchUMKM={location.state.fetchUMKM}*/
-        />
+        <Checkout umkm={umkm} id={id} fetchUMKM={fetchUMKMn} />
       </Box>
     </Box>
   );

@@ -15,24 +15,28 @@ import AddUmkm from "./Components/AddUmkm";
 import About from "./Components/Main/About";
 import Checkout from "./Components/Main/Checkout";
 import Card from "./Components/Main/Card";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Daftar from "./Components/Register/Daftar";
 
 function App() {
+  const client = new QueryClient();
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="login" element={<Login />} />
+    <QueryClientProvider client={client}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="login" element={<Login />} />
 
-        <Route path="main" element={<Main />}>
-          <Route path="card" element={<Card />} />
-          <Route path=":id" element={<About />} />
-        </Route>
-        <Route path="registerUMKM" element={<AddUmkm />} />
-        <Route path="checkout" element={<Checkout />} />
-        <Route path="daftar" element={<Daftar />} />
-      </Routes>
-    </Router>
+          <Route path="main" element={<Main />}>
+            <Route path="card" element={<Card />} />
+            <Route path=":id" element={<About />} />
+          </Route>
+          <Route path="registerUMKM" element={<AddUmkm />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="daftar" element={<Daftar />} />
+        </Routes>
+      </Router>
+    </QueryClientProvider>
   );
 }
 

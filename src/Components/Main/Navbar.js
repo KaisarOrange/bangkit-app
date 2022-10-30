@@ -21,7 +21,11 @@ import DrawerExample from "./Drawer";
 function Navbar(props) {
   const navigate = useNavigate();
   const [user, loading, error] = useAuthState(auth);
+  const home = () => {
+    navigate("/main/card");
 
+    window.location.reload();
+  };
   return (
     <Flex
       bg="white"
@@ -35,12 +39,7 @@ function Navbar(props) {
       zIndex={100}
     >
       <Box>
-        <Image
-          cursor="pointer"
-          onClick={() => navigate("/main/card")}
-          w="10rem"
-          src={logo}
-        />
+        <Image cursor="pointer" onClick={() => home()} w="10rem" src={logo} />
       </Box>
       <Spacer />
       <Box>

@@ -9,6 +9,7 @@ import {
   Text,
   Image,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
