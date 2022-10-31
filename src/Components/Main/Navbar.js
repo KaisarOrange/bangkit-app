@@ -22,9 +22,12 @@ function Navbar(props) {
   const navigate = useNavigate();
   const [user, loading, error] = useAuthState(auth);
   const home = () => {
+    props.setFilterUmkm("");
     navigate("/main/card");
-
-    window.location.reload();
+  };
+  const submit = (element) => {
+    element.preventDefault();
+    navigate("/main/card");
   };
   return (
     <Flex
@@ -43,7 +46,14 @@ function Navbar(props) {
       </Box>
       <Spacer />
       <Box>
-        <Input w="50vw" placeholder="Bakmie cina"></Input>
+        <form onSubmit={submit}>
+          <Input
+            onChange={(event) => props.setFilterUmkm(event.target.value)}
+            value={props.filterUmkm}
+            w="50vw"
+            placeholder="Bakmie cina"
+          ></Input>
+        </form>
       </Box>
       <Spacer />
       <Box

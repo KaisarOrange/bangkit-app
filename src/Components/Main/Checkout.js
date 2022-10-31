@@ -20,7 +20,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase-config";
 
 function Checkout(props) {
-  const { umkm, id, fetchUMKM, fetchUser } = props;
+  const { umkm, id } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const [invest, setInvest] = useState(0);
@@ -29,9 +29,8 @@ function Checkout(props) {
     event.preventDefault();
     const userDoc = doc(db, "umkm", id);
     const newField = { danaRecieved: umkm.danaRecieved + invest };
-
     await updateDoc(userDoc, newField);
-    fetchUMKM();
+    window.location.reload();
   };
 
   return (

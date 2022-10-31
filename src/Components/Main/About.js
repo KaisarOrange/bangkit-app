@@ -5,32 +5,34 @@ import { db, storage } from "../../firebase-config";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getDownloadURL, ref } from "firebase/storage";
 import Checkout from "./Checkout";
+import { useQuery } from "@tanstack/react-query";
 
 function About() {
   let { id } = useParams();
   const location = useLocation();
-  const [umkm, setUmkm] = useState({});
+  //const [umkm, setUmkm] = useState({});
 
-  async function fetchUMKMn() {
+  async function fetchUMKM() {
     const ref = doc(db, "umkm", id);
     try {
       const docSnap = await getDoc(ref);
       const data = docSnap.data();
-      setUmkm(data);
+      return data;
     } catch (err) {
       console.log(err);
     }
   }
+  const { data, isLoading } = useQuery(["about"], fetchUMKM);
 
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
   //const umkm = location.state.umkm[0].find((e) => e.id === id);
   const convert = (n) => {
     const a = parseInt(n);
     return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  useEffect(() => {
-    fetchUMKMn();
-  }, []);
   return (
     <Box
       m="auto"
@@ -54,7 +56,7 @@ function About() {
         mt={50}
       >
         <Box>
-          <Image m={0} h="400px" w="100vh" src={umkm.imageUrl} />
+          <Image m={0} h="400px" w="100vh" src={data?.imageUrl} />
         </Box>
         <Box
           display="flex"
@@ -63,9 +65,11 @@ function About() {
           h="100%"
           p="0px 15px"
         >
-          <Text fontWeight="bold">{umkm.nama}</Text>
-          <Text mt={1} fontWeight="small">
-            {umkm.deskripsi}
+          <Text as="h1" m={2} fontSize="2rem" fontWeight="bold">
+            {data?.nama}
+          </Text>
+          <Text m={3} fontWeight="small">
+            {data?.deskripsi}
           </Text>
         </Box>
       </Box>
@@ -83,21 +87,21 @@ function About() {
         rounded="md"
       >
         <Box gap={4} display="flex" alignItems="center">
-          <Avatar size="lg" src={umkm.ownerPhoto} />
-          <Text fontWeight="semibold">{umkm.ownerName}</Text>
+          <Avatar size="lg" src={data?.ownerPhoto} />
+          <Text fontWeight="semibold">{data?.ownerName}</Text>
         </Box>
         <Box mt={5} bg="gray.100">
           <Box
-            w={(umkm.danaRecieved / umkm.dana) * 100 + "%"}
+            w={(data?.danaRecieved / data?.dana) * 100 + "%"}
             rounded="md"
             bg="#14BBC6"
             h={1.5}
           ></Box>
         </Box>
         <Text>Dana terkumpul</Text>
-        <Text fontWeight="semibold">Rp {convert(umkm.danaRecieved)}</Text>
+        <Text fontWeight="semibold">Rp {convert(data?.danaRecieved)}</Text>
 
-        <Checkout umkm={umkm} id={id} fetchUMKM={fetchUMKMn} />
+        <Checkout umkm={data} id={id} />
       </Box>
     </Box>
   );
