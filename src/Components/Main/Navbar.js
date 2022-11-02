@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { logout, db, auth } from "../../firebase-config";
 import { query, collection, getDocs, where, getDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Flex,
   Image,
@@ -21,10 +21,7 @@ import DrawerExample from "./Drawer";
 function Navbar(props) {
   const navigate = useNavigate();
   const [user, loading, error] = useAuthState(auth);
-  const home = () => {
-    props.setFilterUmkm("");
-    navigate("/main/card");
-  };
+
   const submit = (element) => {
     element.preventDefault();
     navigate("/main/card");
@@ -42,7 +39,9 @@ function Navbar(props) {
       zIndex={100}
     >
       <Box>
-        <Image cursor="pointer" onClick={() => home()} w="10rem" src={logo} />
+        <Link to="/main/card" onClick={() => props.setFilterUmkm("")}>
+          <Image cursor="pointer" w="10rem" src={logo} />{" "}
+        </Link>
       </Box>
       <Spacer />
       <Box>
@@ -51,7 +50,7 @@ function Navbar(props) {
             onChange={(event) => props.setFilterUmkm(event.target.value)}
             value={props.filterUmkm}
             w="50vw"
-            placeholder="Bakmie cina"
+            placeholder="Ketoprak"
           ></Input>
         </form>
       </Box>

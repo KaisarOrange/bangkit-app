@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Box, Button, Image, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Image,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+} from "@chakra-ui/react";
 import { doc, getDoc, query, where, collection } from "firebase/firestore";
 import { db, storage } from "../../firebase-config";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getDownloadURL, ref } from "firebase/storage";
 import Checkout from "./Checkout";
 import { useQuery } from "@tanstack/react-query";
+import Navbar from "./Navbar";
+import InfoTab from "./InfoTab";
 
 function About() {
   let { id } = useParams();
@@ -39,6 +52,7 @@ function About() {
       display="flex"
       justifyContent="center"
       alignItems="center"
+      flexDirection="column"
       gap={10}
     >
       <Box
@@ -49,8 +63,8 @@ function About() {
         w="50vw"
         rounded="20px"
         overflow="hidden"
-        boxShadow="sm"
-        bg="gray.200"
+        boxShadow="md"
+        bg="gray.100"
         fontSize="14px"
         fontFamily="helvetica"
         mt={50}
@@ -76,21 +90,24 @@ function About() {
       <Box
         position="fixed"
         right={10}
+        top="35vh"
+        mr={6}
         display="flex"
         flexDirection="column"
-        bg="gray.200"
+        bg="gray.100"
         p={25}
         w={280}
         gap={5}
         justifyContent="center"
         textAlign="center"
         rounded="md"
+        boxShadow="sm"
       >
         <Box gap={4} display="flex" alignItems="center">
           <Avatar size="lg" src={data?.ownerPhoto} />
           <Text fontWeight="semibold">{data?.ownerName}</Text>
         </Box>
-        <Box mt={5} bg="gray.100">
+        <Box mt={5} bg="white">
           <Box
             w={(data?.danaRecieved / data?.dana) * 100 + "%"}
             rounded="md"
@@ -102,6 +119,9 @@ function About() {
         <Text fontWeight="semibold">Rp {convert(data?.danaRecieved)}</Text>
 
         <Checkout umkm={data} id={id} />
+      </Box>
+      <Box w="100vh">
+        <InfoTab />
       </Box>
     </Box>
   );

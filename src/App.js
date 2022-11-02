@@ -17,6 +17,7 @@ import Checkout from "./Components/Main/Checkout";
 import Card from "./Components/Main/Card";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Daftar from "./Components/Register/Daftar";
+import Portofolio from "./Components/Main/Portofolio";
 
 function App() {
   const client = new QueryClient();
@@ -26,10 +27,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="login" element={<Login />} />
-
           <Route path="main" element={<Main />}>
             <Route path="card" element={<Card />} />
             <Route path=":id" element={<About />} />
+            <Route path="portofolio" element={<Portofolio />} />
           </Route>
           <Route path="registerUMKM" element={<AddUmkm />} />
           <Route path="checkout" element={<Checkout />} />

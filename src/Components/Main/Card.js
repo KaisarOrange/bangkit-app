@@ -79,7 +79,7 @@ function Card(props) {
                   <Text mt={1} fontWeight="small">
                     {element.deskripsi}
                   </Text>
-                  <Box mt={5} bg="gray.100">
+                  <Box mt={5} bg="white">
                     <Box
                       rounded="md"
                       bg="#14BBC6"
