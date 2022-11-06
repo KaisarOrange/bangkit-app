@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Divider,
   Table,
   TableCaption,
@@ -14,8 +15,17 @@ import {
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, WarningIcon, DeleteIcon } from "@chakra-ui/icons";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../firebase-config";
 
 function Portofolio() {
+  const navigate = useNavigate();
+
+  const signOut = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <Box mt={70}>
       <Text m={7} as="h1" fontSize="1.5rem" textAlign="center">
@@ -41,7 +51,7 @@ function Portofolio() {
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Box>
-            <Text>Keuntungan</Text>
+            <Text>Saldo</Text>
             <Text>Rp. 0</Text>
           </Box>
           <Box>
@@ -96,6 +106,17 @@ function Portofolio() {
           </Tbody>
         </Table>
       </TableContainer>
+      <Box
+        display="flex"
+        justifyContent="end"
+        alignItems="center"
+        w="50vw"
+        m="auto"
+      >
+        <Button mt={5} fontSize="0.9rem" px={2} bg="#14BBC6" onClick={signOut}>
+          Keluar akun
+        </Button>
+      </Box>
     </Box>
   );
 }

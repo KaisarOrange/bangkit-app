@@ -41,7 +41,7 @@ function Checkout(props) {
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Masukan Jumlah!</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={checkOut}>
             <ModalBody>
@@ -63,7 +63,6 @@ function Checkout(props) {
               <Button type="submit" colorScheme="blue" mr={3} onClick={onClose}>
                 Invest
               </Button>
-              <Button variant="ghost">Secondary Action</Button>
             </ModalFooter>
           </form>
         </ModalContent>

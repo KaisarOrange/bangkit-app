@@ -18,6 +18,7 @@ import Card from "./Components/Main/Card";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Daftar from "./Components/Register/Daftar";
 import Portofolio from "./Components/Main/Portofolio";
+import UmkmDash from "./Components/Main/UmkmDash";
 
 function App() {
   const client = new QueryClient();
@@ -31,6 +32,7 @@ function App() {
             <Route path="card" element={<Card />} />
             <Route path=":id" element={<About />} />
             <Route path="portofolio" element={<Portofolio />} />
+            <Route path="umkm-dashboard" element={<UmkmDash />}></Route>
           </Route>
           <Route path="registerUMKM" element={<AddUmkm />} />
           <Route path="checkout" element={<Checkout />} />

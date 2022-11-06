@@ -154,7 +154,6 @@ function Daftar() {
           </Button>
         </Box>
       </Box>
-      <Text>{}</Text>
     </Box>
   );
 }

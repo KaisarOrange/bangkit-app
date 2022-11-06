@@ -63,7 +63,12 @@ function Navbar(props) {
         gap={5}
       >
         <Text fontWeight="medium">Selamat datang, {props.name}! </Text>
-        <DrawerExample image={props.image} />
+        <Link to="umkm-dashboard">
+          <Avatar size="lg" bg="gray" name="U M" />
+        </Link>
+        <Link to="/main/portofolio">
+          <Avatar size="lg" src={props.image} />
+        </Link>
       </Box>
     </Flex>
   );
