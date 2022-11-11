@@ -7,6 +7,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import RadioCard from "./Radio";
 
 function Finance({ setUmkm, umkm }) {
   const [data, setData] = useState({
@@ -41,6 +42,9 @@ function Finance({ setUmkm, umkm }) {
     }
   };
 
+  useEffect(() => {
+    setUmkm({ ...umkm, finance: finance });
+  }, [finance]);
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <FormControl>
@@ -78,12 +82,7 @@ function Finance({ setUmkm, umkm }) {
       >
         Input data
       </Button>
-      <Button
-        onClick={() => {
-          setUmkm({ ...umkm, finance: finance });
-        }}
-      ></Button>
-      <Button onClick={() => console.log(umkm)}></Button>
+      <RadioCard />
     </Box>
   );
 }
