@@ -40,7 +40,7 @@ function Home() {
         mr="70px"
       >
         <Box cursor="pointer" onClick={() => navigate("/")}>
-          <Image w="14vw" src={logo} />
+          <Image w="12vw" src={logo} />
         </Box>
       </Box>
 

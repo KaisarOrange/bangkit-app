@@ -18,15 +18,16 @@ import {
   db,
   logInWithEmailAndPassword,
   storage,
-} from "../firebase-config";
+} from "../../firebase-config";
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  connectStorageEmulator,
 } from "firebase/storage";
 import { useAuthState } from "react-firebase-hooks/auth";
-import logo from "../img/logo.png";
+import logo from "../../img/logo.png";
 import {
   query,
   collection,
@@ -36,6 +37,9 @@ import {
   setDoc,
   addDoc,
 } from "firebase/firestore";
+import { DuitData } from "../Main/Data";
+import Finance from "./Finance";
+import InfoUmkm from "./InfoUmkm";
 
 function AddUmkm() {
   const [user, loading, error] = useAuthState(auth);
@@ -52,7 +56,27 @@ function AddUmkm() {
     imageUrl: "",
     danaNeeded: 0,
     danaRecieved: 0,
+    finance: [],
   });
+  const [page, setPage] = useState(0);
+
+  const PageDisplay = () => {
+    if (page === 0) {
+      return (
+        <InfoUmkm
+          umkm={umkm}
+          setUmkm={setUmkm}
+          setFile={setFile}
+          file={file}
+          umkmImage={umkm.imageUrl}
+        />
+      );
+    } else if (page === 1) {
+      return <Finance umkm={umkm} setUmkm={setUmkm} />;
+    }
+  };
+
+  const FormTitles = ["Informasi UMKM", "Data Finansial"];
 
   const fetchUserName = async () => {
     try {
@@ -60,7 +84,7 @@ function AddUmkm() {
       const doc = await getDocs(q);
       const data = doc.docs[0].data();
       const image = await getDownloadURL(ref(storage, data.picture));
-      console.log(data.name);
+
       setOwner((prev) => ({
         ...prev,
         name: data.name,
@@ -73,7 +97,6 @@ function AddUmkm() {
   };
 
   const handleAdd = async (e) => {
-    e.preventDefault();
     try {
       await addDoc(collection(db, "umkm"), {
         nama: umkm.name,
@@ -84,6 +107,7 @@ function AddUmkm() {
         ownerUid: owner.uid,
         dana: umkm.danaNeeded,
         danaRecieved: umkm.danaRecieved,
+        finance: umkm.finance,
       });
     } catch (err) {
       console.log(err);
@@ -158,78 +182,56 @@ function AddUmkm() {
       pb="10"
       pl="5"
       pr="5"
-      w="350px"
+      w="400px"
       mt={100}
       ml="auto"
       mr="auto"
       rounded="md"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
     >
-      <Button onClick={() => console.log(owner)}></Button>
-      <form onSubmit={handleAdd}>
+      <form>
         <Stack spacing={3}>
-          <Image m="auto" w="10rem" src={logo} />
-          <FormControl isRequired>
-            <InputGroup>
-              <Input
-                onChange={(event) => {
-                  setUmkm({ ...umkm, name: event.target.value });
-                }}
-                bg="white"
-                type="text"
-                placeholder="Nama UMKM"
-                value={umkm.name}
-              />
-            </InputGroup>
-          </FormControl>
-          <FormControl isRequired>
-            <InputGroup>
-              <Textarea
-                value={umkm.deskripsi}
-                onChange={(event) => {
-                  setUmkm({ ...umkm, deskripsi: event.target.value });
-                }}
-                placeholder="Deskripsi UMKM"
-                size="sm"
-                bg="white"
-              />
-            </InputGroup>
-          </FormControl>
-          <FormControl isRequired>
-            <InputGroup>
-              <Input
-                type="number"
-                onChange={(event) => {
-                  setUmkm({ ...umkm, danaNeeded: event.target.valueAsNumber });
-                }}
-                placeholder="Jumlah dana yang dibutuhkan"
-                size="sm"
-                bg="white"
-              />
-            </InputGroup>
-          </FormControl>
-          <FormControl isRequired>
-            <InputGroup>
-              <Input
-                type="file"
-                id="file"
-                onChange={(event) => {
-                  setFile(event.target.files[0]);
-                }}
-                placeholder="Deskripsi UMKM"
-                size="sm"
-                bg="white"
-              />
-            </InputGroup>
-          </FormControl>
-          <Button
-            type="submit"
-            boxShadow="sm"
-            _hover={{ boxShadow: "md" }}
-            _active={{ boxShadow: "lg" }}
-          >
-            Login
-          </Button>
+          <Stack textAlign="center" spacing={5} mb={5}>
+            <Image m="auto" w="10rem" src={logo} />
+            <Text fontWeight="bold" as="h1">
+              {FormTitles[page]}
+            </Text>
+          </Stack>
+          <Box w={290} h={400}>
+            {PageDisplay()}
+          </Box>
         </Stack>
+        <Box textAlign="center">
+          <Button
+            size="sm"
+            bg="transparent"
+            disabled={page == 0}
+            onClick={() => {
+              setPage((curr) => curr - 1);
+            }}
+          >
+            Kembali
+          </Button>
+          <Button
+            size="sm"
+            bg="transparent"
+            onClick={() => {
+              if (page === FormTitles.length - 1) {
+                try {
+                  handleAdd();
+                } catch (err) {
+                  alert(err);
+                }
+              } else {
+                setPage((curr) => curr + 1);
+              }
+            }}
+          >
+            {page === FormTitles.length - 1 ? "Submit" : "Selanjutnya"}
+          </Button>
+        </Box>
       </form>
     </Box>
   );

@@ -64,7 +64,7 @@ function Navbar(props) {
       >
         <Text fontWeight="medium">Selamat datang, {props.name}! </Text>
         <Link to="umkm-dashboard">
-          <Avatar size="lg" bg="gray" name="U M" />
+          <Avatar size="lg" bg="gray" name="U M" src={props.umkmImage} />
         </Link>
         <Link to="/main/portofolio">
           <Avatar size="lg" src={props.image} />

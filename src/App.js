@@ -11,7 +11,7 @@ import { HashRouter as Router, Link, Route, Routes } from "react-router-dom";
 import Login from "./Components/Login";
 import Home from "./Components/Home";
 import Main from "./Components/Main/Main";
-import AddUmkm from "./Components/AddUmkm";
+import AddUmkm from "./Components/addUmkm/AddUmkm";
 import About from "./Components/Main/About";
 import Checkout from "./Components/Main/Checkout";
 import Card from "./Components/Main/Card";
