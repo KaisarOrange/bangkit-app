@@ -28,7 +28,7 @@ function Bunga({ umkm, setUmkm }) {
 
   const setPaymentDate = (value) => {
     const data = new Date();
-    let date = [];
+    const date = [];
     const days = Number(value) * 30;
     for (let i = 0; i < 3; i++) {
       const hello = data.toLocaleDateString(
@@ -37,16 +37,11 @@ function Bunga({ umkm, setUmkm }) {
       );
       date.push(hello);
     }
-    return (
-      <Box gap={2}>
-        {date.map((e) => {
-          return <Text key={uniqid()}>{e}</Text>;
-        })}
-      </Box>
-    );
+    setDatee(date);
   };
   useEffect(() => {
     angsuranBunga();
+    setPaymentDate(value);
     setUmkm({ ...umkm, date: date });
   }, [value, value2]);
   return (
@@ -82,7 +77,11 @@ function Bunga({ umkm, setUmkm }) {
         mt={4}
         textAlign="center"
       >
-        {setPaymentDate(value)}
+        <Box gap={2}>
+          {date.map((e) => {
+            return <Text key={uniqid()}>{e}</Text>;
+          })}
+        </Box>
       </Box>
       <Button onClick={() => console.log(umkm)}></Button>
     </Box>
