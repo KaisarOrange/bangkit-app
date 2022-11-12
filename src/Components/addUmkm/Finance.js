@@ -82,7 +82,6 @@ function Finance({ setUmkm, umkm }) {
       >
         Input data
       </Button>
-      <RadioCard />
     </Box>
   );
 }

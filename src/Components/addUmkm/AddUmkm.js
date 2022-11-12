@@ -40,11 +40,14 @@ import {
 import { DuitData } from "../Main/Data";
 import Finance from "./Finance";
 import InfoUmkm from "./InfoUmkm";
+import Aset from "./Aset";
+import Bunga from "./Bunga";
 
 function AddUmkm() {
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
   const [file, setFile] = useState("");
+
   const [owner, setOwner] = useState({
     name: "",
     imageUrl: "",
@@ -60,6 +63,13 @@ function AddUmkm() {
   });
   const [page, setPage] = useState(0);
 
+  const FormTitles = [
+    "Informasi UMKM",
+    "Pendapatan",
+    "Neraca",
+    "Besaran Bunga",
+  ];
+
   const PageDisplay = () => {
     if (page === 0) {
       return (
@@ -73,10 +83,12 @@ function AddUmkm() {
       );
     } else if (page === 1) {
       return <Finance umkm={umkm} setUmkm={setUmkm} />;
+    } else if (page === 2) {
+      return <Aset umkm={umkm} setUmkm={setUmkm} />;
+    } else if (page === 3) {
+      return <Bunga umkm={umkm} setUmkm={setUmkm} />;
     }
   };
-
-  const FormTitles = ["Informasi UMKM", "Data Finansial"];
 
   const fetchUserName = async () => {
     try {
@@ -183,7 +195,7 @@ function AddUmkm() {
       pl="5"
       pr="5"
       w="400px"
-      mt={100}
+      mt={70}
       ml="auto"
       mr="auto"
       rounded="md"

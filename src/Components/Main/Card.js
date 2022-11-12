@@ -17,7 +17,7 @@ function Card(props) {
 
   const convert = (n) => {
     const a = parseInt(n);
-    return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
   if (isLoading) {
     return <h1>Loading...</h1>;
