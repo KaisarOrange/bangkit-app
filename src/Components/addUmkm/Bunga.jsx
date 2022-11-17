@@ -6,26 +6,15 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 function Bunga({ umkm, setUmkm }) {
-  const [value, setValue] = useState("1");
-  const [value2, setValue2] = useState("1");
+  const [value, setValue] = useState("3");
+  const [value2, setValue2] = useState("3");
   const [date, setDatee] = useState([]);
-  const [bunga, setBunga] = useState(3);
-  const itt = Number(value);
+  const [bunga, setBunga] = useState([]);
+
   const convert = (n) => {
     const a = parseInt(n);
     return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
-
-  const angsuranBunga = () => {
-    if (value2 === "3") {
-      setBunga(3);
-    } else if (value2 === "6") {
-      setBunga(6);
-    } else if (value2 === "12") {
-      setBunga(12);
-    }
-  };
-
   const setPaymentDate = (value) => {
     const data = new Date();
     const date = [];
@@ -38,19 +27,34 @@ function Bunga({ umkm, setUmkm }) {
       date.push(hello);
     }
     setDatee(date);
+    return date;
   };
+
   useEffect(() => {
-    angsuranBunga();
-    setPaymentDate(value);
-    setUmkm({ ...umkm, date: date });
+    setUmkm({
+      ...umkm,
+      date: setPaymentDate(value),
+      bunga: Number(value2),
+      angsuran: value,
+    });
   }, [value, value2]);
   return (
     <Box>
       <Radio
         value={value}
         setValue={setValue}
-        setValue2={setValue2}
-        value2={value2}
+        optionOne={"3"}
+        optionTwo={"6"}
+        optionThree={"12"}
+        option={"Bulan"}
+      />
+      <Radio
+        value={value2}
+        setValue={setValue2}
+        optionOne={"3"}
+        optionTwo={"6"}
+        optionThree={"12"}
+        option={"%"}
       />
       <Text mt={5} textAlign="center" fontWeight="semibold">
         Simulasi angsuran
@@ -65,7 +69,10 @@ function Bunga({ umkm, setUmkm }) {
         textAlign="center"
         fontWeight="bold"
       >
-        Rp. {convert((((100000000 * itt) / 3) * bunga) / 100 / 4)}
+        Rp.{" "}
+        {convert(
+          (((100000000 * Number(value)) / 3) * Number(value2)) / 100 / 4
+        )}
       </Text>
       <Text fontWeight="semibold" textAlign="center" mt={5}>
         Pembayaran setiap{" "}
@@ -83,7 +90,7 @@ function Bunga({ umkm, setUmkm }) {
           })}
         </Box>
       </Box>
-      <Button onClick={() => console.log(umkm)}></Button>
+      <Button onClick={() => console.log(umkm)}>Hello</Button>
     </Box>
   );
 }

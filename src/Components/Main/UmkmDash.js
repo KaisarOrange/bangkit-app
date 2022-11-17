@@ -1,4 +1,4 @@
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Avatar, Box, Image, Text } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import {
   collection,
@@ -12,10 +12,14 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../firebase-config";
 import UpdateModal from "./UpdateModal";
+import Checkout from "./Checkout";
 
 function UmkmDash() {
   const [user, loading, error] = useAuthState(auth);
-
+  const convert = (n) => {
+    const a = parseInt(n);
+    return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
   const [data, setData] = useState({
     nama: "",
     deskripsi: "",
@@ -23,6 +27,10 @@ function UmkmDash() {
     imageUrl: "",
     uid: "",
     id: "",
+    bunga: 0,
+    date: [],
+    angsuran: "",
+    danaDiterima: 0,
   });
 
   async function fetchUMKM() {
@@ -40,6 +48,10 @@ function UmkmDash() {
         imageUrl: data.imageUrl,
         uid: user.uid,
         deskripsi: data.deskripsi,
+        date: data.date,
+        danaDiterima: data.danaRecieved,
+        bunga: data.bunga,
+        angsuran: data.angsuran,
         id: doc.docs[0].id,
       }));
     } catch (err) {
@@ -85,6 +97,45 @@ function UmkmDash() {
           </Text>
         </Box>
         <UpdateModal id={data.id} />
+      </Box>
+      <Box
+        position="fixed"
+        right={10}
+        top="35vh"
+        mr={6}
+        display="flex"
+        flexDirection="column"
+        bg="gray.100"
+        p={25}
+        w={280}
+        gap={5}
+        justifyContent="center"
+        textAlign="center"
+        rounded="md"
+        boxShadow="sm"
+      >
+        <Box display="flex" alignItems="center">
+          <Text fontWeight="semibold">Pembayaran selanjutnya</Text>
+        </Box>
+        <Box>
+          <Text color="teal" fontWeight="bold" fontSize="1.2rem">
+            {data.date[0]}
+          </Text>
+        </Box>
+        <Box>
+          <Text textAlign="start" fontWeight="semibold">
+            Bunga yang harus dibayar
+          </Text>
+          <Text mt={5} color="teal" fontWeight="bold" fontSize="1.2rem">
+            Rp.
+            {convert(
+              (((data.danaDiterima * data.bunga) / 3) * Number(data.angsuran)) /
+                100 /
+                4
+            )}
+          </Text>
+        </Box>
+        <Checkout umkm={data} />
       </Box>
     </Box>
   );

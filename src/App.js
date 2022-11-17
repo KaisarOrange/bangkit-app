@@ -19,6 +19,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Daftar from "./Components/Register/Daftar";
 import Portofolio from "./Components/Main/Portofolio";
 import UmkmDash from "./Components/Main/UmkmDash";
+import Admin from "./Components/Adimin/Admin";
 
 function App() {
   const client = new QueryClient();
@@ -37,6 +38,7 @@ function App() {
           <Route path="registerUMKM" element={<AddUmkm />} />
           <Route path="checkout" element={<Checkout />} />
           <Route path="daftar" element={<Daftar />} />
+          <Route path="admin" element={<Admin />} />
         </Routes>
       </Router>
     </QueryClientProvider>

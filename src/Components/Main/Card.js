@@ -79,7 +79,15 @@ function Card(props) {
                   <Text mt={1} fontWeight="small">
                     {element.deskripsi}
                   </Text>
-                  <Box mt={5} bg="white">
+                  <Box color="teal" gap={2} display="flex">
+                    <Text fontWeight="semibold">Bunga {element.bunga} % </Text>
+                    <Text fontWeight="semibold">
+                      {" "}
+                      . {element.angsuran} Bulan
+                    </Text>
+                  </Box>
+
+                  <Box mt={3} bg="white">
                     <Box
                       rounded="md"
                       bg="#14BBC6"

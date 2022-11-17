@@ -60,6 +60,11 @@ function AddUmkm() {
     danaNeeded: 0,
     danaRecieved: 0,
     finance: [],
+    hutang: 0,
+    modal: 0,
+    date: [],
+    angsuran: 0,
+    bunga: 0,
   });
   const [page, setPage] = useState(0);
 
@@ -120,6 +125,11 @@ function AddUmkm() {
         dana: umkm.danaNeeded,
         danaRecieved: umkm.danaRecieved,
         finance: umkm.finance,
+        modal: umkm.modal,
+        date: umkm.date,
+        bunga: umkm.bunga,
+        hutang: umkm.hutang,
+        angsuran: umkm.angsuran,
       });
     } catch (err) {
       console.log(err);

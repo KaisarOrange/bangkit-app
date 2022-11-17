@@ -36,7 +36,7 @@ function Checkout(props) {
   return (
     <>
       <Button bg="#14BBC6" mt={4} onClick={onOpen}>
-        Invest
+        Bayar
       </Button>
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -63,6 +63,7 @@ function Checkout(props) {
               <Button type="submit" colorScheme="blue" mr={3} onClick={onClose}>
                 Invest
               </Button>
+              <Button onClick={() => console.log(umkm)}></Button>
             </ModalFooter>
           </form>
         </ModalContent>

@@ -121,8 +121,9 @@ function About() {
         <Checkout umkm={data} id={id} />
       </Box>
       <Box w="100vh">
-        <InfoTab />
+        <InfoTab umkm={data} />
       </Box>
+      <Button onClick={() => console.log(data)}>Hello</Button>
     </Box>
   );
 }
