@@ -7,6 +7,7 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { db, auth, storage } from "../../firebase-config";
 import { query, collection, getDocs, where } from "firebase/firestore";
 import Navbar from "./Navbar";
+import Loading from "./Loading";
 
 function Main() {
   const [name, setName] = useState("");
@@ -48,24 +49,7 @@ function Main() {
   }, [user, loading]);
 
   if (isLoading) {
-    return (
-      <Box
-        boxSize="sm"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        m="auto"
-        mt={200}
-      >
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="#14BBC6"
-          size="xl"
-        />
-      </Box>
-    );
+    return <Loading />;
   }
   return (
     <Box pt={100} pb={10}>

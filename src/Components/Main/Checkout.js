@@ -16,19 +16,52 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase-config";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase-config";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useQuery } from "@tanstack/react-query";
 
 function Checkout(props) {
-  const { umkm, id } = props;
+  const { umkm, id, fetchUMKM } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
+  const [user] = useAuthState(auth);
   const [invest, setInvest] = useState(0);
+  const { data, isLoading } = useQuery(["check"], fetchUMKM);
+  const [investor, setInvestor] = useState([]);
+
+  const pushInvestor = () => {
+    const exist = investor.findIndex((e) => e.investorId === user.id) > -1;
+    const index = investor.findIndex((e) => e.investorId === user.id);
+
+    if (investor.length === 0) {
+      setInvestor([
+        ...investor,
+        { investorId: user.uid, investorInvestedAmount: invest },
+      ]);
+    } else if (!exist || investor.length === 0) {
+      setInvestor([
+        ...investor,
+        { investorId: user.uid, investorInvestedAmount: invest },
+      ]);
+    } else {
+      investor[index] = {
+        ...investor[index],
+        investorId: user.uid,
+        investorInvestedAmount: invest,
+      };
+    }
+    console.log(investor);
+  };
 
   const checkOut = async (event) => {
     event.preventDefault();
+    pushInvestor();
     const userDoc = doc(db, "umkm", id);
-    const newField = { danaRecieved: umkm.danaRecieved + invest };
+    const newField = {
+      danaRecieved: umkm.danaRecieved + invest,
+      investor: investor,
+    };
     await updateDoc(userDoc, newField);
     window.location.reload();
   };
@@ -58,12 +91,11 @@ function Checkout(props) {
                 </InputGroup>
               </FormControl>
             </ModalBody>
-
             <ModalFooter>
               <Button type="submit" colorScheme="blue" mr={3} onClick={onClose}>
                 Invest
               </Button>
-              <Button onClick={() => console.log(umkm)}></Button>
+              <Button onClick={() => console.log(data)}></Button>
             </ModalFooter>
           </form>
         </ModalContent>

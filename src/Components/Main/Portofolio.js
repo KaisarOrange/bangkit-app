@@ -87,21 +87,27 @@ function Portofolio() {
               <Td isNumeric>8%</Td>
               <Td isNumeric>1.000.000.000</Td>
               <Td isNumeric>80.000.000</Td>
-              <DeleteIcon cursor="pointer" mt="18px" />
+              <Td>
+                <DeleteIcon cursor="pointer" />
+              </Td>
             </Tr>
             <Tr cursor="default">
               <Td>Bugatti Showroom</Td>
               <Td isNumeric>8%</Td>
               <Td isNumeric>1.000.000.000</Td>
               <Td isNumeric>80.000.000</Td>
-              <DeleteIcon cursor="pointer" mt="18px" />
+              <Td>
+                <DeleteIcon cursor="pointer" />
+              </Td>
             </Tr>
             <Tr cursor="default">
               <Td>Bugatti Showroom</Td>
               <Td isNumeric>8%</Td>
               <Td isNumeric>1.000.000.000</Td>
               <Td isNumeric>80.000.000</Td>
-              <DeleteIcon cursor="pointer" mt="18px" />
+              <Td>
+                <DeleteIcon cursor="pointer" />
+              </Td>
             </Tr>
           </Tbody>
         </Table>

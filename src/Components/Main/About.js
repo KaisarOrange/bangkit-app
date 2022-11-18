@@ -118,7 +118,7 @@ function About() {
         <Text>Dana terkumpul</Text>
         <Text fontWeight="semibold">Rp {convert(data?.danaRecieved)}</Text>
 
-        <Checkout umkm={data} id={id} />
+        <Checkout umkm={data} id={id} fetchUMKM={fetchUMKM} />
       </Box>
       <Box w="100vh">
         <InfoTab umkm={data} />
