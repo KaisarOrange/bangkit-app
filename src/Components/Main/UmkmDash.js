@@ -39,19 +39,17 @@ function UmkmDash() {
     investor: [],
   });
 
-  const { data: umkm, isLoading } = useQuery(["dash"], async () => {
+  const fetchUMKM = async () => {
+    const q = query(collection(db, "umkm"), where("ownerUid", "==", user?.uid));
     try {
-      const q = query(
-        collection(db, "umkm"),
-        where("ownerUid", "==", user?.uid)
-      );
       const doc = await getDocs(q);
-      const data = doc.docs[0].data();
-      return data;
+      return doc.docs[0].data();
     } catch (err) {
       console.log(err);
     }
-  });
+  };
+
+  const { data: umkm, isLoading } = useQuery(["dash"], fetchUMKM);
 
   const {
     data: userInfo,
@@ -80,8 +78,9 @@ function UmkmDash() {
   });
 
   if (isLoading) {
-    return <Loading />;
+    console.log("Hello");
   }
+
   return (
     <Box>
       <Box display="flex" alignItems="center" justifyContent="center">
@@ -114,7 +113,7 @@ function UmkmDash() {
               {umkm?.nama}
             </Text>
             <Box m={3} fontWeight="small">
-              {userLoad
+              {isLoading
                 ? "Hello"
                 : userInfo?.map((e, index) => {
                     return <Box key={index}>{e.email}</Box>;

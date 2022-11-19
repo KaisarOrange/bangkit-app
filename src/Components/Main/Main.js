@@ -27,7 +27,7 @@ function Main() {
     }
   };
 
-  const { data, isLoading } = useQuery(["umkm"], fetchUMKM);
+  const { data, isLoading, status } = useQuery(["umkm"], fetchUMKM);
 
   const fetchUserName = async () => {
     try {
@@ -45,6 +45,7 @@ function Main() {
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/");
+
     fetchUserName();
   }, [user, loading]);
 
