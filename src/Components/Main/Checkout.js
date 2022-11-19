@@ -41,12 +41,7 @@ function Checkout(props) {
       data.investor.findIndex((e) => e.investorId === user.uid) > -1;
     const index = data.investor.findIndex((e) => e.investorId === user.uid);
 
-    if (investor.length === 0) {
-      investor.push(...investor, {
-        investorId: user.uid,
-        investorInvestedAmount: invest,
-      });
-    } else if (!exist) {
+    if (investor.length === 0 || !exist) {
       investor.push(...investor, {
         investorId: user.uid,
         investorInvestedAmount: invest,
