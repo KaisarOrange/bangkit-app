@@ -61,6 +61,7 @@ function Main() {
         image={image}
       />
       <Outlet context={{ fetchUMKM: [fetchUMKM], filterUmkm: [filterUmkm] }} />
+      <Button onClick={() => console.log(data.map((e) => e.id))}>Hello</Button>
     </Box>
   );
 }

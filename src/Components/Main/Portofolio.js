@@ -16,15 +16,52 @@ import {
 import { PhoneIcon, AddIcon, WarningIcon, DeleteIcon } from "@chakra-ui/icons";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../firebase-config";
+import { auth, db, logout } from "../../firebase-config";
+import { useQuery } from "@tanstack/react-query";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function Portofolio() {
   const navigate = useNavigate();
-
+  const [user] = useAuthState(auth);
   const signOut = () => {
     logout();
     navigate("/");
   };
+
+  const { data: userData } = useQuery(["userDataPorto"], async () => {
+    try {
+      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+      const doc = await getDocs(q);
+
+      return doc.docs[0].data();
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  const { data: umkmData, isLoading } = useQuery(["umkmDataPorto"], () => {
+    const umkm = [];
+    try {
+      userData?.invested.map(async (e) => {
+        const ref = doc(db, "umkm", e.umkmId);
+        const data = await getDoc(ref);
+
+        umkm.push(...umkm, data.data());
+        console.log(umkm);
+      });
+      return umkm;
+    } catch (err) {
+      console.log(err);
+    }
+  });
 
   return (
     <Box mt={70}>
@@ -46,8 +83,13 @@ function Portofolio() {
         rounded="md"
       >
         <Box>
-          <Text>Jumlah Investasi</Text>
-          <Text>Rp. 0 </Text>
+          <Text>Jumlah investasi</Text>
+          <Text>
+            Rp.
+            {userData?.invested.reduce((total, num) => {
+              return total + num.investedAmount;
+            }, 0)}{" "}
+          </Text>
         </Box>
         <Box display="flex" justifyContent="space-between">
           <Box>
@@ -82,33 +124,19 @@ function Portofolio() {
             </Tr>
           </Thead>
           <Tbody color="teal">
-            <Tr cursor="default">
-              <Td>Bugatti Showroom</Td>
-              <Td isNumeric>8%</Td>
-              <Td isNumeric>1.000.000.000</Td>
-              <Td isNumeric>80.000.000</Td>
-              <Td>
-                <DeleteIcon cursor="pointer" />
-              </Td>
-            </Tr>
-            <Tr cursor="default">
-              <Td>Bugatti Showroom</Td>
-              <Td isNumeric>8%</Td>
-              <Td isNumeric>1.000.000.000</Td>
-              <Td isNumeric>80.000.000</Td>
-              <Td>
-                <DeleteIcon cursor="pointer" />
-              </Td>
-            </Tr>
-            <Tr cursor="default">
-              <Td>Bugatti Showroom</Td>
-              <Td isNumeric>8%</Td>
-              <Td isNumeric>1.000.000.000</Td>
-              <Td isNumeric>80.000.000</Td>
-              <Td>
-                <DeleteIcon cursor="pointer" />
-              </Td>
-            </Tr>
+            {userData?.invested.map((e, index) => {
+              return (
+                <Tr key={index} cursor="default">
+                  <Td>Bugatti Showroom</Td>
+                  <Td isNumeric>8%</Td>
+                  <Td isNumeric>{e.investedAmount}</Td>
+                  <Td isNumeric>80.000.000</Td>
+                  <Td>
+                    <DeleteIcon cursor="pointer" />
+                  </Td>
+                </Tr>
+              );
+            })}
           </Tbody>
         </Table>
       </TableContainer>
@@ -123,6 +151,7 @@ function Portofolio() {
           Keluar akun
         </Button>
       </Box>
+      <Button onClick={() => console.log(umkmData)}>helo</Button>
     </Box>
   );
 }
