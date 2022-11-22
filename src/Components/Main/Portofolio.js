@@ -14,7 +14,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { PhoneIcon, AddIcon, WarningIcon, DeleteIcon } from "@chakra-ui/icons";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db, logout } from "../../firebase-config";
 import { useQuery } from "@tanstack/react-query";
@@ -27,10 +27,12 @@ import {
   where,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { async } from "@firebase/util";
 
 function Portofolio() {
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
+
   const signOut = () => {
     logout();
     navigate("/");
@@ -47,20 +49,14 @@ function Portofolio() {
     }
   });
 
-  const { data: umkmData, isLoading } = useQuery(["umkmDataPorto"], () => {
-    const umkm = [];
-    try {
-      userData?.invested.map(async (e) => {
-        const ref = doc(db, "umkm", e.umkmId);
-        const data = await getDoc(ref);
-
-        umkm.push(...umkm, data.data());
-        console.log(umkm);
-      });
-      return umkm;
-    } catch (err) {
-      console.log(err);
-    }
+  const { data: umkmData } = useQuery(["umkmDataPorto"], () => {
+    return userData?.invested
+      .map((e) => e.umkmId)
+      .map((b) =>
+        getDoc(doc(db, "umkm", b)).then((e) => {
+          return e.data();
+        })
+      );
   });
 
   return (
@@ -157,31 +153,5 @@ function Portofolio() {
 }
 
 export default Portofolio;
-/*<Box
-        w="50vw"
-        rounded="md"
-        bg="gray.100"
-        m="auto"
-        mt={12}
-        minH="30vh"
-        p={30}
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-      >
-        <Box color="gray.500" display="flex" gap={16}>
-          <Text></Text>
-          <Text></Text>
-          <Text></Text>
-          <Text>Nilai Investasi</Text>
-        </Box>
-        <Divider height={2} color="black" />
-        <Box mt={3} display="flex">
-          <Box display="flex">
-            <Text></Text>
-            <Text></Text>
-            <Text>1.000.000.000</Text>
-            <Text>80.000.000</Text> 
-          </Box>
-        </Box>
-      </Box> */
+/*
+ */

@@ -4,10 +4,11 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { getDownloadURL, ref } from "firebase/storage";
-import { db, auth, storage } from "../../firebase-config";
+import { db, auth, storage, logout } from "../../firebase-config";
 import { query, collection, getDocs, where } from "firebase/firestore";
 import Navbar from "./Navbar";
 import Loading from "./Loading";
+import { signOut } from "firebase/auth";
 
 function Main() {
   const [name, setName] = useState("");
@@ -15,7 +16,10 @@ function Main() {
   const [user, loading, error] = useAuthState(auth);
   const [image, setImage] = useState();
   const [filterUmkm, setFilterUmkm] = useState("");
-
+  const signOut = () => {
+    logout();
+    navigate("/");
+  };
   const fetchUMKM = async () => {
     const umkmCollectionRef = collection(db, "umkm");
     try {
@@ -62,6 +66,9 @@ function Main() {
       />
       <Outlet context={{ fetchUMKM: [fetchUMKM], filterUmkm: [filterUmkm] }} />
       <Button onClick={() => console.log(data.map((e) => e.id))}>Hello</Button>
+      <Button mt={5} fontSize="0.9rem" px={2} bg="#14BBC6" onClick={signOut}>
+        Keluar akun
+      </Button>
     </Box>
   );
 }
