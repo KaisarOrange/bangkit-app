@@ -28,6 +28,7 @@ import {
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { async } from "@firebase/util";
+import Loading from "./Loading";
 
 function Portofolio() {
   const navigate = useNavigate();
@@ -49,15 +50,18 @@ function Portofolio() {
     }
   });
 
-  const { data: umkmData } = useQuery(["umkmDataPorto"], () => {
-    return userData?.invested
-      .map((e) => e.umkmId)
-      .map((b) =>
-        getDoc(doc(db, "umkm", b)).then((e) => {
-          return e.data();
-        })
+  let dataUser = userData?.invested;
+
+  const { data: umkmData, isLoading } = useQuery(
+    ["umkmDataPorto"],
+    async () => {
+      return await Promise.all(
+        dataUser
+          .map((e) => e.umkmId)
+          .map((b) => getDoc(doc(db, "umkm", b)).then((e) => e.data()))
       );
-  });
+    }
+  );
 
   return (
     <Box mt={70}>
@@ -146,6 +150,7 @@ function Portofolio() {
         <Button mt={5} fontSize="0.9rem" px={2} bg="#14BBC6" onClick={signOut}>
           Keluar akun
         </Button>
+        <Text>{isLoading ? "True" : "False"}</Text>
       </Box>
       <Button onClick={() => console.log(umkmData)}>helo</Button>
     </Box>
