@@ -17,24 +17,58 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import {
+  arrayUnion,
   collection,
+  deleteField,
   doc,
   getDoc,
   getDocs,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { auth, db } from "../../firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useQuery } from "@tanstack/react-query";
 
-function Checkout(props) {
-  const { id, fetchUMKM } = props;
+function Checkout({ id, fetchUMKM }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const [user] = useAuthState(auth);
   const [invest, setInvest] = useState(0);
   const { data, isLoading } = useQuery(["check"], fetchUMKM);
 
+  const filter = (arr) => {
+    const newArray = [];
+    arr.forEach((e) => {
+      if (!newArray.includes(e)) {
+        newArray.push(e);
+      }
+    });
+    return newArray;
+  };
+
+  const { data: userData } = useQuery(["userData"], async () => {
+    try {
+      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+      const doc = await getDocs(q);
+
+      return doc.docs[0].data();
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  const { data: userDataId } = useQuery(["userDataId"], async () => {
+    try {
+      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+      const doc = await getDocs(q);
+
+      return doc.docs[0].id;
+    } catch (err) {
+      console.error(err);
+    }
+  });
   const pushInvestor = () => {
     const investor = data?.investor;
     const exist =
@@ -54,19 +88,44 @@ function Checkout(props) {
           data.investor[index].investorInvestedAmount + invest,
       };
     }
-    return investor;
+    return filter(investor);
+  };
+
+  const pushInvest = () => {
+    const investor = userData?.invested;
+    const exist = userData?.invested.findIndex((e) => e.umkmId === id) > -1;
+    const index = userData?.invested.findIndex((e) => e.umkmId === id);
+
+    if (investor.length === 0 || !exist) {
+      investor.push(...investor, {
+        umkmId: id,
+        investedAmount: invest,
+      });
+    } else {
+      investor[index] = {
+        umkmId: id,
+        investedAmount: userData.invested[index].investedAmount + invest,
+      };
+    }
+
+    return filter(investor);
   };
 
   const checkOut = async (event) => {
     event.preventDefault();
 
-    const userDoc = doc(db, "umkm", id);
+    const umkmDoc = doc(db, "umkm", id);
+    const userDoc = doc(db, "users", userDataId);
     const newField = {
       danaRecieved: data.danaRecieved + invest,
       investor: pushInvestor(),
     };
-    await updateDoc(userDoc, newField);
-    //window.location.reload();
+    const newUserField = {
+      invested: pushInvest(),
+    };
+    await updateDoc(umkmDoc, newField);
+    await updateDoc(userDoc, newUserField);
+    // window.location.reload();
   };
 
   return (
@@ -100,7 +159,7 @@ function Checkout(props) {
               </Button>
               <Button
                 onClick={() => {
-                  console.log(pushInvestor());
+                  console.log(userData.id);
                 }}
               ></Button>
             </ModalFooter>

@@ -65,6 +65,7 @@ function AddUmkm() {
     date: [],
     angsuran: 0,
     bunga: 0,
+    investor: [],
   });
   const [page, setPage] = useState(0);
 
@@ -130,6 +131,7 @@ function AddUmkm() {
         bunga: umkm.bunga,
         hutang: umkm.hutang,
         angsuran: umkm.angsuran,
+        investor: umkm.investor,
       });
     } catch (err) {
       console.log(err);

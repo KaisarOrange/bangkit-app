@@ -51,33 +51,30 @@ function UmkmDash() {
 
   const { data: umkm, isLoading } = useQuery(["dash"], fetchUMKM);
 
-  const {
-    data: userInfo,
-    isLoading: userLoad,
-    status,
-  } = useQuery(["dashUser"], async () => {
-    try {
-      const arr = [];
-      if (!isLoading) {
-        for (let i = 0; i < umkm?.investor.length; i++) {
-          const q = query(
-            collection(db, "users"),
-            where("uid", "==", umkm?.investor[i].investorId)
-          );
+  const { data: userInfo, isLoading: userLoad } = useQuery(
+    ["dashUser"],
+    async () => {
+      try {
+        const arr = [];
 
-          const doc = await getDocs(q);
+        for (let i = 0; i < umkm?.investor.length; i++) {
+          const doc = await getDocs(
+            query(
+              collection(db, "users"),
+              where("uid", "==", umkm?.investor[i].investorId)
+            )
+          );
           const data = doc.docs[0].data();
           arr.push(data);
-          console.log(data);
         }
+        return arr;
+      } catch (err) {
+        console.error(err);
       }
-      return arr;
-    } catch (err) {
-      console.error(err);
     }
-  });
+  );
 
-  if (isLoading) {
+  if (userLoad) {
     console.log("Hello");
   }
 
@@ -98,7 +95,6 @@ function UmkmDash() {
           fontFamily="helvetica"
           mt={10}
         >
-          {status}
           <Box>
             <Image m={0} h="400px" w="100vh" src={umkm?.imageUrl} />
           </Box>
@@ -113,11 +109,7 @@ function UmkmDash() {
               {umkm?.nama}
             </Text>
             <Box m={3} fontWeight="small">
-              {isLoading
-                ? "Hello"
-                : userInfo?.map((e, index) => {
-                    return <Box key={index}>{e.email}</Box>;
-                  })}
+              {umkm?.deskripsi}
             </Box>
           </Box>
           <UpdateModal />
@@ -164,7 +156,9 @@ function UmkmDash() {
         </Box>
       </Box>
       <Stack mt={20} justifyContent="center" alignItems="center">
-        <Button onClick={() => console.log(userInfo)}>Hello</Button>
+        {userInfo?.map((e, index) => {
+          return <Box key={index}>{e.email}</Box>;
+        })}
       </Stack>
     </Box>
   );
