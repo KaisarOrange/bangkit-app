@@ -22,7 +22,13 @@ import UmkmDash from "./Components/Main/UmkmDash";
 import Admin from "./Components/Adimin/Admin";
 
 function App() {
-  const client = new QueryClient();
+  const client = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnMount: true,
+      },
+    },
+  });
   return (
     <QueryClientProvider client={client}>
       <Router>

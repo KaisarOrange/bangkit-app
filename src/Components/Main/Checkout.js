@@ -125,7 +125,7 @@ function Checkout({ id, fetchUMKM }) {
     };
     await updateDoc(umkmDoc, newField);
     await updateDoc(userDoc, newUserField);
-    // window.location.reload();
+    window.location.reload();
   };
 
   return (

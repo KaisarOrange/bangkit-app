@@ -65,7 +65,6 @@ function Main() {
         image={image}
       />
       <Outlet context={{ fetchUMKM: [fetchUMKM], filterUmkm: [filterUmkm] }} />
-      <Button onClick={() => console.log(data.map((e) => e.id))}>Hello</Button>
       <Button mt={5} fontSize="0.9rem" px={2} bg="#14BBC6" onClick={signOut}>
         Keluar akun
       </Button>

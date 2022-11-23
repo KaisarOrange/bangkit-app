@@ -1,14 +1,12 @@
 import {
   Box,
   Button,
-  Divider,
+  Spinner,
   Table,
-  TableCaption,
   TableContainer,
   Tbody,
   Td,
   Text,
-  Tfoot,
   Th,
   Thead,
   Tr,
@@ -18,6 +16,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db, logout } from "../../firebase-config";
 import { useQuery } from "@tanstack/react-query";
+import converter from "./converter";
 import {
   collection,
   doc,
@@ -50,18 +49,24 @@ function Portofolio() {
     }
   });
 
-  let dataUser = userData?.invested;
+  //let dataUser = ;
 
-  const { data: umkmData, isLoading } = useQuery(
-    ["umkmDataPorto"],
-    async () => {
-      return await Promise.all(
-        dataUser
-          .map((e) => e.umkmId)
-          .map((b) => getDoc(doc(db, "umkm", b)).then((e) => e.data()))
-      );
-    }
-  );
+  const {
+    data: umkmData,
+    isLoading,
+    refetch,
+    isError,
+  } = useQuery(["umkmDataPorto"], async () => {
+    return Promise.all(
+      userData?.invested
+        .map((e) => e.umkmId)
+        .map((b) => getDoc(doc(db, "umkm", b)).then((e) => e.data()))
+    );
+  });
+
+  if (isError) {
+    refetch();
+  }
 
   return (
     <Box mt={70}>
@@ -85,10 +90,12 @@ function Portofolio() {
         <Box>
           <Text>Jumlah investasi</Text>
           <Text>
-            Rp.
-            {userData?.invested.reduce((total, num) => {
-              return total + num.investedAmount;
-            }, 0)}{" "}
+            Rp.{" "}
+            {converter(
+              userData?.invested.reduce((total, num) => {
+                return total + num.investedAmount;
+              }, 0)
+            )}{" "}
           </Text>
         </Box>
         <Box display="flex" justifyContent="space-between">
@@ -98,7 +105,20 @@ function Portofolio() {
           </Box>
           <Box>
             <Text>Imbal Hasil</Text>
-            <Text>Rp. 0</Text>
+            <Text>
+              Rp.{" "}
+              {converter(
+                umkmData
+                  ?.map((e) => e.bunga)
+                  .reduce((total, num, index) => {
+                    console.log(num);
+                    return (
+                      total +
+                      (userData?.invested[index].investedAmount * num) / 100
+                    );
+                  }, 0)
+              )}
+            </Text>
           </Box>
         </Box>
       </Box>
@@ -124,19 +144,44 @@ function Portofolio() {
             </Tr>
           </Thead>
           <Tbody color="teal">
-            {userData?.invested.map((e, index) => {
-              return (
-                <Tr key={index} cursor="default">
-                  <Td>Bugatti Showroom</Td>
-                  <Td isNumeric>8%</Td>
-                  <Td isNumeric>{e.investedAmount}</Td>
-                  <Td isNumeric>80.000.000</Td>
-                  <Td>
-                    <DeleteIcon cursor="pointer" />
-                  </Td>
-                </Tr>
-              );
-            })}
+            {isLoading ? (
+              <Tr>
+                <Td>
+                  <Spinner />
+                </Td>
+                <Td>
+                  <Spinner />
+                </Td>
+                <Td>
+                  <Spinner />
+                </Td>
+                <Td>
+                  <Spinner />
+                </Td>
+              </Tr>
+            ) : (
+              umkmData?.map((e, index) => {
+                return (
+                  <Tr key={index} cursor="default">
+                    <Td>{e.nama}</Td>
+                    <Td isNumeric>{e.bunga}</Td>
+                    <Td isNumeric>
+                      Rp. {converter(userData?.invested[index].investedAmount)}
+                    </Td>
+                    <Td isNumeric>
+                      Rp.{" "}
+                      {converter(
+                        (userData?.invested[index].investedAmount * e.bunga) /
+                          100
+                      )}
+                    </Td>
+                    <Td>
+                      <DeleteIcon cursor="pointer" />
+                    </Td>
+                  </Tr>
+                );
+              })
+            )}
           </Tbody>
         </Table>
       </TableContainer>
@@ -150,9 +195,7 @@ function Portofolio() {
         <Button mt={5} fontSize="0.9rem" px={2} bg="#14BBC6" onClick={signOut}>
           Keluar akun
         </Button>
-        <Text>{isLoading ? "True" : "False"}</Text>
       </Box>
-      <Button onClick={() => console.log(umkmData)}>helo</Button>
     </Box>
   );
 }
