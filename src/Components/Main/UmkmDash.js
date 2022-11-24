@@ -12,32 +12,17 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../firebase-config";
 import UpdateModal from "./UpdateModal";
-import Checkout from "./Checkout";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "./Loading";
+import AlertDialogExample from "./Dialogue";
 
 function UmkmDash() {
-  const [user, loading, error] = useAuthState(auth);
-  const [truee, setTrue] = useState(false);
+  const [user] = useAuthState(auth);
 
   const convert = (n) => {
     const a = parseInt(n);
     return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
-
-  const [data, setData] = useState({
-    nama: "",
-    deskripsi: "",
-    ownerName: "",
-    imageUrl: "",
-    uid: "",
-    id: "",
-    bunga: 0,
-    date: [],
-    angsuran: "",
-    danaDiterima: 0,
-    investor: [],
-  });
 
   const fetchUMKM = async () => {
     const q = query(collection(db, "umkm"), where("ownerUid", "==", user?.uid));
@@ -73,10 +58,15 @@ function UmkmDash() {
       }
     }
   );
-
-  if (userLoad) {
-    console.log("Hello");
-  }
+  const bayar = () => {
+    const userPay = userInfo?.map((e) =>
+      e.invested.filter((e) => e.umkmId === umkm.umkmId)
+    );
+    const userPayTwo = userPay.map((e) => e[0]);
+    //.map((e) => (e.profit = 20))
+    console.log(userPayTwo);
+    console.log(userInfo);
+  };
 
   return (
     <Box>
@@ -152,7 +142,20 @@ function UmkmDash() {
               )}
             </Text>
           </Box>
-          <Button bg="#14BBC6">Bayar</Button>
+          <AlertDialogExample
+            BtnText={"Bayar bunga"}
+            title={"Membayar Bunga"}
+            pesan={
+              "Anda akan membayar bunga sebesar Rp. " +
+              convert(
+                (((umkm?.danaRecieved * umkm?.bunga) / 3) *
+                  Number(umkm?.angsuran)) /
+                  100 /
+                  4
+              )
+            }
+            bayar={bayar}
+          />
         </Box>
       </Box>
       <Stack mt={20} justifyContent="center" alignItems="center">

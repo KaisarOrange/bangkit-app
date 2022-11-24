@@ -20,6 +20,7 @@ import Daftar from "./Components/Register/Daftar";
 import Portofolio from "./Components/Main/Portofolio";
 import UmkmDash from "./Components/Main/UmkmDash";
 import Admin from "./Components/Adimin/Admin";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App() {
   const client = new QueryClient({
@@ -47,6 +48,7 @@ function App() {
           <Route path="admin" element={<Admin />} />
         </Routes>
       </Router>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }

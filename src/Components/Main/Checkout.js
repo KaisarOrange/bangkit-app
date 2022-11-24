@@ -30,13 +30,14 @@ import {
 import { auth, db } from "../../firebase-config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useQuery } from "@tanstack/react-query";
+import { ref } from "firebase/storage";
 
-function Checkout({ id, fetchUMKM }) {
+function Checkout({ id, fetchUMKM, refetchUmkm }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const [user] = useAuthState(auth);
   const [invest, setInvest] = useState(0);
-  const { data, isLoading } = useQuery(["check"], fetchUMKM);
+  const { data, isLoading, refetch } = useQuery(["check"], fetchUMKM);
 
   const filter = (arr) => {
     const newArray = [];
@@ -125,7 +126,8 @@ function Checkout({ id, fetchUMKM }) {
     };
     await updateDoc(umkmDoc, newField);
     await updateDoc(userDoc, newUserField);
-    window.location.reload();
+    //window.location.reload();
+    refetchUmkm();
   };
 
   return (

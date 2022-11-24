@@ -14,16 +14,15 @@ import {
 import { doc, getDoc, query, where, collection } from "firebase/firestore";
 import { db, storage } from "../../firebase-config";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { getDownloadURL, ref } from "firebase/storage";
+
 import Checkout from "./Checkout";
 import { useQuery } from "@tanstack/react-query";
-import Navbar from "./Navbar";
+
 import InfoTab from "./InfoTab";
+import converter from "./converter";
 
 function About() {
   let { id } = useParams();
-  const location = useLocation();
-  //const [umkm, setUmkm] = useState({});
 
   async function fetchUMKM() {
     const ref = doc(db, "umkm", id);
@@ -35,16 +34,15 @@ function About() {
       console.log(err);
     }
   }
-  const { data, isLoading } = useQuery(["about"], fetchUMKM);
+  const {
+    data,
+    isLoading,
+    refetch: refetchUmkm,
+  } = useQuery(["about"], fetchUMKM);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
-  //const umkm = location.state.umkm[0].find((e) => e.id === id);
-  const convert = (n) => {
-    const a = parseInt(n);
-    return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
 
   return (
     <Box
@@ -116,9 +114,9 @@ function About() {
           ></Box>
         </Box>
         <Text>Dana terkumpul</Text>
-        <Text fontWeight="semibold">Rp {convert(data?.danaRecieved)}</Text>
+        <Text fontWeight="semibold">Rp. {converter(data?.danaRecieved)}</Text>
 
-        <Checkout umkm={data} id={id} fetchUMKM={fetchUMKM} />
+        <Checkout refetchUmkm={refetchUmkm} id={id} fetchUMKM={fetchUMKM} />
       </Box>
       <Box w="100vh">
         <InfoTab umkm={data} />

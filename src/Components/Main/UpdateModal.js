@@ -97,7 +97,7 @@ function UpdateModal({ id }) {
   }, [file]);
   return (
     <Box w="30vh" textAlign="center" m="auto" mb={5}>
-      <Button bg="#14BBC6" onClick={onOpen} pr={10} pl={10}>
+      <Button colorScheme="teal" onClick={onOpen} pr={10} pl={10}>
         Ubah
       </Button>
 
