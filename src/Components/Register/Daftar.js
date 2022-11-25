@@ -63,7 +63,8 @@ function Daftar() {
     password,
     picture,
     isInvestor,
-    isUMKM
+    isUMKM,
+    invested
   ) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -75,6 +76,7 @@ function Daftar() {
         picture,
         isInvestor,
         isUMKM,
+        invested,
       });
 
       if (formData.isUMKM === "1") {
@@ -140,7 +142,8 @@ function Daftar() {
                     formData.password,
                     formData.imageUrl,
                     formData.isInvestor,
-                    formData.isUMKM
+                    formData.isUMKM,
+                    []
                   );
                 } catch (err) {
                   alert("hello");

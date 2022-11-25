@@ -38,16 +38,20 @@ function Portofolio() {
     navigate("/");
   };
 
-  const { data: userData } = useQuery(["userDataPorto"], async () => {
-    try {
-      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-      const doc = await getDocs(q);
+  const { data: userData } = useQuery(
+    ["userDataPorto"],
+    async () => {
+      try {
+        const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+        const doc = await getDocs(q);
 
-      return doc.docs[0].data();
-    } catch (err) {
-      console.error(err);
-    }
-  });
+        return doc.docs[0].data();
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    { enabled: Boolean(user) }
+  );
 
   //let dataUser = ;
 
@@ -56,13 +60,17 @@ function Portofolio() {
     isLoading,
     refetch,
     isError,
-  } = useQuery(["umkmDataPorto"], async () => {
-    return Promise.all(
-      userData?.invested
-        .map((e) => e.umkmId)
-        .map((b) => getDoc(doc(db, "umkm", b)).then((e) => e.data()))
-    );
-  });
+  } = useQuery(
+    ["umkmDataPorto"],
+    async () => {
+      return Promise.all(
+        userData?.invested
+          .map((e) => e.umkmId)
+          .map((b) => getDoc(doc(db, "umkm", b)).then((e) => e.data()))
+      );
+    },
+    { enabled: Boolean(userData) }
+  );
 
   if (isError) {
     refetch();

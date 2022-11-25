@@ -11,7 +11,6 @@ import Loading from "./Loading";
 import { signOut } from "firebase/auth";
 
 function Main() {
-  const [name, setName] = useState("");
   const navigate = useNavigate();
   const [user, loading, error] = useAuthState(auth);
   const [image, setImage] = useState();
@@ -33,24 +32,25 @@ function Main() {
 
   const { data, isLoading, status } = useQuery(["umkm"], fetchUMKM);
 
-  const fetchUserName = async () => {
-    try {
+  const { data: userData, refetch } = useQuery(
+    ["userDataNav"],
+    async () => {
       const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-      const doc = await getDocs(q);
-      const data = doc.docs[0].data();
-      setName(data.name);
-      const image = await getDownloadURL(ref(storage, data.picture));
-      setImage(image);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+      try {
+        const doc = await getDocs(q);
+        return doc.docs[0].data();
+
+        //  const image = await getDownloadURL(ref(storage, data.picture));
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    { enabled: Boolean(user) }
+  );
 
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/");
-
-    fetchUserName();
   }, [user, loading]);
 
   if (isLoading) {
@@ -61,8 +61,8 @@ function Main() {
       <Navbar
         filterUmkm={filterUmkm}
         setFilterUmkm={setFilterUmkm}
-        name={name}
-        image={image}
+        name={userData?.name}
+        image={userData?.picture}
       />
       <Outlet context={{ fetchUMKM: [fetchUMKM], filterUmkm: [filterUmkm] }} />
       <Button mt={5} fontSize="0.9rem" px={2} bg="#14BBC6" onClick={signOut}>

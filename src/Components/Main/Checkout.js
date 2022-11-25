@@ -101,6 +101,7 @@ function Checkout({ id, fetchUMKM, refetchUmkm }) {
       investor.push(...investor, {
         umkmId: id,
         investedAmount: invest,
+        profit: 0,
       });
     } else {
       investor[index] = {

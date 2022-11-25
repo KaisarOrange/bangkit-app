@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -34,7 +35,9 @@ function UmkmDash() {
     }
   };
 
-  const { data: umkm, isLoading } = useQuery(["dash"], fetchUMKM);
+  const { data: umkm, isLoading } = useQuery(["dash"], fetchUMKM, {
+    enabled: Boolean(user),
+  });
 
   const { data: userInfo, isLoading: userLoad } = useQuery(
     ["dashUser"],
@@ -56,18 +59,45 @@ function UmkmDash() {
       } catch (err) {
         console.error(err);
       }
-    }
+    },
+    { enabled: Boolean(umkm) }
   );
-  const bayar = () => {
+  const bayar = async () => {
     const userPay = userInfo?.map((e) =>
       e.invested.filter((e) => e.umkmId === umkm.umkmId)
     );
-    const userPayTwo = userPay.map((e) => e[0]);
-    //.map((e) => (e.profit = 20))
-    console.log(userPayTwo);
-    console.log(userInfo);
+    const userPayTwo = userPay
+      .map((e) => e[0])
+      .map((e) => (e.profit = (e.investedAmount * umkm.bunga) / 100));
+    //
+    // console.log(userPayTwo);
+    // console.log(userInfo);
+
+    userInfo?.forEach((e) => {
+      updateInvestor(e);
+      //console.log(e);
+    });
   };
 
+  const updateInvestor = async (e) => {
+    const q = query(collection(db, "users"), where("uid", "==", e.uid));
+
+    const doca = await getDocs(q);
+
+    const second = async (e) => {
+      console.log(e);
+      try {
+        await updateDoc(doc(db, "users", doca?.docs[0].id), {
+          name: e.name,
+          invested: e.invested,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    second(e);
+  };
+  //
   return (
     <Box>
       <Box display="flex" alignItems="center" justifyContent="center">

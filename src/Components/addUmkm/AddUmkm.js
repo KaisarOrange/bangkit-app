@@ -36,6 +36,7 @@ import {
   doc,
   setDoc,
   addDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { DuitData } from "../Main/Data";
 import Finance from "./Finance";
@@ -66,6 +67,7 @@ function AddUmkm() {
     angsuran: 0,
     bunga: 0,
     investor: [],
+    umkmId: "",
   });
   const [page, setPage] = useState(0);
 
@@ -132,7 +134,11 @@ function AddUmkm() {
         hutang: umkm.hutang,
         angsuran: umkm.angsuran,
         investor: umkm.investor,
-      });
+      }).then((ref) =>
+        updateDoc(doc(db, "umkm", ref.id), {
+          umkmId: ref.id,
+        })
+      );
     } catch (err) {
       console.log(err);
     }
