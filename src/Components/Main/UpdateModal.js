@@ -23,21 +23,18 @@ import { useEffect, useState } from "react";
 import { db, storage } from "../../firebase-config";
 import camera from "../../img/camera.png";
 
-function UpdateModal({ id }) {
+function UpdateModal({ id, refetch }) {
   const [file, setFile] = useState("");
   const [umkmImage, setUmkmImage] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
-  async function updateUmkm() {
-    try {
-      updateDoc(doc(db, "umkm", id), {
-        deskripsi: deskripsi,
-        imageUrl: umkmImage,
-      });
 
-      window.location.reload();
-    } catch (err) {
-      console.log(err);
-    }
+  function updateUmkm() {
+    console.log(id);
+    updateDoc(doc(db, "umkm", id), {
+      deskripsi: deskripsi,
+      imageUrl: umkmImage,
+    });
+    refetch();
   }
   const { isOpen, onOpen, onClose } = useDisclosure();
 

@@ -177,11 +177,7 @@ function Portofolio() {
                       Rp. {converter(userData?.invested[index].investedAmount)}
                     </Td>
                     <Td isNumeric>
-                      Rp.{" "}
-                      {converter(
-                        (userData?.invested[index].investedAmount * e.bunga) /
-                          100
-                      )}
+                      Rp. {converter(userData?.invested[index].profit)}
                     </Td>
                     <Td>
                       <DeleteIcon cursor="pointer" />

@@ -65,9 +65,6 @@ function Main() {
         image={userData?.picture}
       />
       <Outlet context={{ fetchUMKM: [fetchUMKM], filterUmkm: [filterUmkm] }} />
-      <Button mt={5} fontSize="0.9rem" px={2} bg="#14BBC6" onClick={signOut}>
-        Keluar akun
-      </Button>
     </Box>
   );
 }

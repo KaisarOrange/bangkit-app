@@ -54,11 +54,11 @@ function About() {
       gap={10}
     >
       <Box
-        h={650}
+        h={600}
         display="flex"
         flexDirection="column"
         justifyContent="center"
-        w="50vw"
+        w="45vw"
         rounded="20px"
         overflow="hidden"
         boxShadow="md"
@@ -121,7 +121,6 @@ function About() {
       <Box w="100vh">
         <InfoTab umkm={data} />
       </Box>
-      <Button onClick={() => console.log(data)}>Hello</Button>
     </Box>
   );
 }

@@ -35,7 +35,11 @@ function UmkmDash() {
     }
   };
 
-  const { data: umkm, isLoading } = useQuery(["dash"], fetchUMKM, {
+  const {
+    data: umkm,
+    isLoading,
+    refetch,
+  } = useQuery(["dash"], fetchUMKM, {
     enabled: Boolean(user),
   });
 
@@ -66,17 +70,17 @@ function UmkmDash() {
     const userPay = userInfo?.map((e) =>
       e.invested.filter((e) => e.umkmId === umkm.umkmId)
     );
-    const userPayTwo = userPay
+    userPay
       .map((e) => e[0])
       .map((e) => (e.profit = (e.investedAmount * umkm.bunga) / 100));
-    //
-    // console.log(userPayTwo);
-    // console.log(userInfo);
 
     userInfo?.forEach((e) => {
       updateInvestor(e);
-      //console.log(e);
     });
+    await updateDoc(doc(db, "umkm", umkm.umkmId), {
+      hasPay: 1,
+    });
+    refetch();
   };
 
   const updateInvestor = async (e) => {
@@ -102,11 +106,11 @@ function UmkmDash() {
     <Box>
       <Box display="flex" alignItems="center" justifyContent="center">
         <Box
-          h={650}
+          h={600}
           display="flex"
           flexDirection="column"
           justifyContent="center"
-          w="50vw"
+          w="45vw"
           rounded="20px"
           overflow="hidden"
           boxShadow="md"
@@ -132,7 +136,7 @@ function UmkmDash() {
               {umkm?.deskripsi}
             </Box>
           </Box>
-          <UpdateModal />
+          <UpdateModal id={umkm?.umkmId} refetch={refetch} />
         </Box>
         <Box
           position="fixed"
@@ -151,7 +155,9 @@ function UmkmDash() {
           boxShadow="sm"
         >
           <Box display="flex" alignItems="center">
-            <Text fontWeight="semibold">Pembayaran selanjutnya</Text>
+            <Text textAlign="start" fontWeight="semibold">
+              Jatuh tempo pembayaran
+            </Text>
           </Box>
           <Box>
             <Text color="teal" fontWeight="bold" fontSize="1.2rem">
@@ -162,15 +168,22 @@ function UmkmDash() {
             <Text textAlign="start" fontWeight="semibold">
               Bunga yang harus dibayar
             </Text>
-            <Text mt={5} color="teal" fontWeight="bold" fontSize="1.2rem">
-              Rp.
-              {convert(
-                (((umkm?.danaRecieved * umkm?.bunga) / 3) *
-                  Number(umkm?.angsuran)) /
-                  100 /
-                  4
+
+            <Box mt={5} color="teal" fontWeight="bold" fontSize="1.2rem">
+              {umkm?.hasPay !== 0 ? (
+                "Lunas 😁👍"
+              ) : (
+                <Text>
+                  Rp.{" "}
+                  {convert(
+                    (((umkm?.danaRecieved * umkm?.bunga) / 3) *
+                      Number(umkm?.angsuran)) /
+                      100 /
+                      4
+                  )}
+                </Text>
               )}
-            </Text>
+            </Box>
           </Box>
           <AlertDialogExample
             BtnText={"Bayar bunga"}
@@ -193,6 +206,9 @@ function UmkmDash() {
           return <Box key={index}>{e.email}</Box>;
         })}
       </Stack>
+      <Button ml={700} onClick={() => console.log(umkm)}>
+        Umkm
+      </Button>
     </Box>
   );
 }

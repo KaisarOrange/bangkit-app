@@ -107,6 +107,7 @@ function Checkout({ id, fetchUMKM, refetchUmkm }) {
       investor[index] = {
         umkmId: id,
         investedAmount: userData.invested[index].investedAmount + invest,
+        profit: userData.invested[index].profit,
       };
     }
 
