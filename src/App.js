@@ -1,12 +1,3 @@
-import "./App.css";
-import {
-  Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Text,
-  useRadio,
-} from "@chakra-ui/react";
 import { HashRouter as Router, Link, Route, Routes } from "react-router-dom";
 import Login from "./Components/Login";
 import Home from "./Components/Home";

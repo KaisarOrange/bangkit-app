@@ -17,17 +17,9 @@ function Bunga({ umkm, setUmkm }) {
   };
   const setPaymentDate = (value) => {
     const data = new Date();
-    const date = [];
     const days = Number(value) * 30;
-    for (let i = 0; i < 3; i++) {
-      const hello = data.toLocaleDateString(
-        "en-Uk",
-        data.setDate(data.getDate() + days)
-      );
-      date.push(hello);
-    }
-    setDatee(date);
-    return date;
+    data.setDate(data.getDate() + days);
+    return data;
   };
 
   useEffect(() => {

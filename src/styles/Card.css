@@ -1,7 +1,7 @@
 .Card:hover {
   color: teal;
-  transform: scale(1.03);
+  transform: scale(1.01);
 }
 .Card {
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }

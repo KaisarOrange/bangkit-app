@@ -134,6 +134,7 @@ function AddUmkm() {
         hutang: umkm.hutang,
         angsuran: umkm.angsuran,
         investor: umkm.investor,
+        hasPay: 0,
       }).then((ref) =>
         updateDoc(doc(db, "umkm", ref.id), {
           umkmId: ref.id,

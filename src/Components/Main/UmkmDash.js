@@ -1,5 +1,4 @@
 import { Avatar, Box, Button, Image, Stack, Text } from "@chakra-ui/react";
-
 import {
   collection,
   doc,
@@ -16,14 +15,11 @@ import UpdateModal from "./UpdateModal";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "./Loading";
 import AlertDialogExample from "./Dialogue";
+import converter from "./converter";
+import month from "./getMonth";
 
 function UmkmDash() {
   const [user] = useAuthState(auth);
-
-  const convert = (n) => {
-    const a = parseInt(n);
-    return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
 
   const fetchUMKM = async () => {
     const q = query(collection(db, "umkm"), where("ownerUid", "==", user?.uid));
@@ -35,15 +31,11 @@ function UmkmDash() {
     }
   };
 
-  const {
-    data: umkm,
-    isLoading,
-    refetch,
-  } = useQuery(["dash"], fetchUMKM, {
+  const { data: umkm, refetch } = useQuery(["dash"], fetchUMKM, {
     enabled: Boolean(user),
   });
 
-  const { data: userInfo, isLoading: userLoad } = useQuery(
+  const { data: userInfo } = useQuery(
     ["dashUser"],
     async () => {
       try {
@@ -66,6 +58,10 @@ function UmkmDash() {
     },
     { enabled: Boolean(umkm) }
   );
+
+  const currentDate = new Date(umkm?.date.seconds * 1000);
+  const hello = new Date();
+
   const bayar = async () => {
     const userPay = userInfo?.map((e) =>
       e.invested.filter((e) => e.umkmId === umkm.umkmId)
@@ -161,7 +157,8 @@ function UmkmDash() {
           </Box>
           <Box>
             <Text color="teal" fontWeight="bold" fontSize="1.2rem">
-              {umkm?.date[0]}
+              {currentDate.getDate()} {month(currentDate.getMonth())}{" "}
+              {currentDate.getFullYear()}
             </Text>
           </Box>
           <Box>
@@ -175,7 +172,7 @@ function UmkmDash() {
               ) : (
                 <Text>
                   Rp.{" "}
-                  {convert(
+                  {converter(
                     (((umkm?.danaRecieved * umkm?.bunga) / 3) *
                       Number(umkm?.angsuran)) /
                       100 /
@@ -188,9 +185,11 @@ function UmkmDash() {
           <AlertDialogExample
             BtnText={"Bayar bunga"}
             title={"Membayar Bunga"}
+            hasPay={umkm?.hasPay}
+            date={currentDate.getTime()}
             pesan={
               "Anda akan membayar bunga sebesar Rp. " +
-              convert(
+              converter(
                 (((umkm?.danaRecieved * umkm?.bunga) / 3) *
                   Number(umkm?.angsuran)) /
                   100 /
@@ -206,7 +205,7 @@ function UmkmDash() {
           return <Box key={index}>{e.email}</Box>;
         })}
       </Stack>
-      <Button ml={700} onClick={() => console.log(umkm)}>
+      <Button ml={700} onClick={() => console.log()}>
         Umkm
       </Button>
     </Box>

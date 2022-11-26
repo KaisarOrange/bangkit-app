@@ -38,7 +38,7 @@ function Portofolio() {
     navigate("/");
   };
 
-  const { data: userData } = useQuery(
+  const { data: userData, refetch: refetchUser } = useQuery(
     ["userDataPorto"],
     async () => {
       try {
@@ -52,8 +52,6 @@ function Portofolio() {
     },
     { enabled: Boolean(user) }
   );
-
-  //let dataUser = ;
 
   const {
     data: umkmData,

@@ -9,14 +9,20 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
+import { useEffect } from "react";
 
-function AlertDialogExample({ BtnText, title, pesan, bayar }) {
+function AlertDialogExample({ BtnText, title, pesan, bayar, hasPay, date }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
-
+  const today = new Date();
   return (
     <>
-      <Button colorScheme="teal" onClick={onOpen}>
+      <Button
+        cursor="pointer"
+        disabled={date > today.getTime() || hasPay === 1}
+        colorScheme="teal"
+        onClick={onOpen}
+      >
         {BtnText}
       </Button>
 
