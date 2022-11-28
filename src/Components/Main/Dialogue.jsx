@@ -7,20 +7,32 @@ import {
   AlertDialogOverlay,
   Button,
   useDisclosure,
-} from "@chakra-ui/react";
-import React from "react";
-import { useEffect } from "react";
+} from '@chakra-ui/react';
+import { doc, updateDoc } from 'firebase/firestore';
+import React from 'react';
+import { useEffect } from 'react';
+import { db } from '../../firebase-config';
 
-function AlertDialogExample({ BtnText, title, pesan, bayar, hasPay, date }) {
+function AlertDialogExample({
+  BtnText,
+  title,
+  pesan,
+  bayar,
+  hasPay,
+  datea,
+  canPay,
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
-  const today = new Date();
+
+  useEffect(() => {}, []);
+
   return (
     <>
       <Button
-        cursor="pointer"
-        disabled={date > today.getTime() || hasPay === 1}
-        colorScheme="teal"
+        cursor='pointer'
+        disabled={datea.getTime() > canPay || hasPay === 1}
+        colorScheme='teal'
         onClick={onOpen}
       >
         {BtnText}
@@ -33,7 +45,7 @@ function AlertDialogExample({ BtnText, title, pesan, bayar, hasPay, date }) {
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
               {title}
             </AlertDialogHeader>
 
@@ -41,7 +53,7 @@ function AlertDialogExample({ BtnText, title, pesan, bayar, hasPay, date }) {
 
             <AlertDialogFooter>
               <Button
-                colorScheme="teal"
+                colorScheme='teal'
                 onClick={() => {
                   bayar();
                   onClose();
