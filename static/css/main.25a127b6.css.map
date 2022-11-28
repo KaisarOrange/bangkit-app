@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.25a127b6.css","mappings":"AAAA,YACE,UAAW,CACX,6BAAsB,CAAtB,qBACF,CACA,MACE,8BACF","sources":["styles/Card.css"],"sourcesContent":[".Card:hover {\r\n  color: teal;\r\n  transform: scale(1.01);\r\n}\r\n.Card {\r\n  transition: all 0.1s ease-in-out;\r\n}\r\n"],"names":[],"sourceRoot":""}
