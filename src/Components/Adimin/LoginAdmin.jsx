@@ -31,11 +31,7 @@ function Login() {
       // maybe trigger a loading screen
       return;
     }
-    if (user?.uid === 'ARZsztwYV0NjXxaAXMd6Hef8k5Z2') {
-      navigate('/admin');
-    }
-    if (user && user?.uid !== 'ARZsztwYV0NjXxaAXMd6Hef8k5Z2')
-      navigate('/main/card');
+    if (user) navigate('/main/card');
   }, [user, loading]);
 
   return (

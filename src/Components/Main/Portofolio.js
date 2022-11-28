@@ -38,7 +38,7 @@ function Portofolio() {
     navigate('/');
   };
 
-  const { data: userData, refetch: refetchUser } = useQuery(
+  const { data: userData, isLoading: LoadUserData } = useQuery(
     ['userDataPorto'],
     async () => {
       try {
@@ -56,12 +56,7 @@ function Portofolio() {
     }
   );
 
-  const {
-    data: umkmData,
-    isLoading,
-    refetch,
-    isError,
-  } = useQuery(
+  const { data: umkmData, isLoading } = useQuery(
     ['umkmDataPorto'],
     async () => {
       return Promise.all(
@@ -72,7 +67,9 @@ function Portofolio() {
     },
     { enabled: Boolean(userData) }
   );
-
+  if (LoadUserData) {
+    return <Loading />;
+  }
   return (
     <Box mt={70}>
       <Text m={7} as='h1' fontSize='1.5rem' textAlign='center'>
@@ -113,13 +110,10 @@ function Portofolio() {
             <Text>
               Rp.{' '}
               {converter(
-                umkmData
-                  ?.map((e) => e.bunga)
+                userData?.invested
+                  .map((e) => e.profit)
                   .reduce((total, num, index) => {
-                    return (
-                      total +
-                      (userData?.invested[index].investedAmount * num) / 100
-                    );
+                    return total + num;
                   }, 0)
               )}
             </Text>

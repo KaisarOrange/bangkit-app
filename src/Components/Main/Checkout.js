@@ -14,8 +14,8 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+} from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import {
   arrayUnion,
   collection,
@@ -26,18 +26,27 @@ import {
   query,
   updateDoc,
   where,
-} from "firebase/firestore";
-import { auth, db } from "../../firebase-config";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useQuery } from "@tanstack/react-query";
-import { ref } from "firebase/storage";
+} from 'firebase/firestore';
+import { auth, db } from '../../firebase-config';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useQuery } from '@tanstack/react-query';
+import { ref } from 'firebase/storage';
 
-function Checkout({ id, fetchUMKM, refetchUmkm }) {
+function Checkout({ id, refetchUmkm }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const [user] = useAuthState(auth);
   const [invest, setInvest] = useState(0);
-  const { data, isLoading, refetch } = useQuery(["check"], fetchUMKM);
+  const { data } = useQuery(['check'], async () => {
+    const ref = doc(db, 'umkm', id);
+    try {
+      const docSnap = await getDoc(ref);
+      const data = docSnap.data();
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  });
 
   const filter = (arr) => {
     const newArray = [];
@@ -49,9 +58,9 @@ function Checkout({ id, fetchUMKM, refetchUmkm }) {
     return newArray;
   };
 
-  const { data: userData } = useQuery(["userData"], async () => {
+  const { data: userData } = useQuery(['userData'], async () => {
     try {
-      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+      const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
       const doc = await getDocs(q);
 
       return doc.docs[0].data();
@@ -60,9 +69,9 @@ function Checkout({ id, fetchUMKM, refetchUmkm }) {
     }
   });
 
-  const { data: userDataId } = useQuery(["userDataId"], async () => {
+  const { data: userDataId } = useQuery(['userDataId'], async () => {
     try {
-      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+      const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
       const doc = await getDocs(q);
 
       return doc.docs[0].id;
@@ -117,8 +126,8 @@ function Checkout({ id, fetchUMKM, refetchUmkm }) {
   const checkOut = async (event) => {
     event.preventDefault();
 
-    const umkmDoc = doc(db, "umkm", id);
-    const userDoc = doc(db, "users", userDataId);
+    const umkmDoc = doc(db, 'umkm', id);
+    const userDoc = doc(db, 'users', userDataId);
     const newField = {
       danaRecieved: data.danaRecieved + invest,
       investor: pushInvestor(),
@@ -134,7 +143,7 @@ function Checkout({ id, fetchUMKM, refetchUmkm }) {
 
   return (
     <>
-      <Button bg="#14BBC6" mt={4} onClick={onOpen}>
+      <Button bg='#14BBC6' mt={4} onClick={onOpen}>
         Bayar
       </Button>
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
@@ -147,9 +156,9 @@ function Checkout({ id, fetchUMKM, refetchUmkm }) {
               <FormControl isRequired>
                 <InputGroup>
                   <Input
-                    type="number"
-                    placeholder="Dana"
-                    bg="white"
+                    type='number'
+                    placeholder='Dana'
+                    bg='white'
                     onChange={(event) => {
                       setInvest(event.target.valueAsNumber);
                     }}
@@ -158,7 +167,7 @@ function Checkout({ id, fetchUMKM, refetchUmkm }) {
               </FormControl>
             </ModalBody>
             <ModalFooter>
-              <Button type="submit" colorScheme="blue" mr={3} onClick={onClose}>
+              <Button type='submit' colorScheme='blue' mr={3} onClick={onClose}>
                 Invest
               </Button>
               <Button

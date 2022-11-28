@@ -21,24 +21,28 @@ import month from './getMonth';
 function UmkmDash() {
   const [user] = useAuthState(auth);
 
-  const fetchUMKM = async () => {
-    const q = query(collection(db, 'umkm'), where('ownerUid', '==', user?.uid));
-    try {
-      const doc = await getDocs(q);
-      return doc.docs[0].data();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const {
     data: umkm,
     refetch,
     isSuccess,
-    isLoading,
-  } = useQuery(['dash'], fetchUMKM, {
-    enabled: Boolean(user),
-  });
+  } = useQuery(
+    ['dash'],
+    async () => {
+      const q = query(
+        collection(db, 'umkm'),
+        where('ownerUid', '==', user?.uid)
+      );
+      try {
+        const doc = await getDocs(q);
+        return doc.docs[0].data();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    {
+      enabled: Boolean(user),
+    }
+  );
 
   const { data: userInfo } = useQuery(
     ['dashUser'],
