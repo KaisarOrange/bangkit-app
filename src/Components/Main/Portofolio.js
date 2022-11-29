@@ -38,7 +38,11 @@ function Portofolio() {
     navigate('/');
   };
 
-  const { data: userData, isLoading: LoadUserData } = useQuery(
+  const {
+    data: userData,
+    isLoading: LoadUserData,
+    isFetching,
+  } = useQuery(
     ['userDataPorto'],
     async () => {
       try {
@@ -67,7 +71,7 @@ function Portofolio() {
     },
     { enabled: Boolean(userData) }
   );
-  if (LoadUserData) {
+  if (isLoading) {
     return <Loading />;
   }
   return (

@@ -8,6 +8,7 @@ import { db, auth, storage, logout } from '../../firebase-config';
 import { query, collection, getDocs, where } from 'firebase/firestore';
 import Navbar from './Navbar';
 import Loading from './Loading';
+import BanNotif from './BanNotif';
 
 function Main() {
   const navigate = useNavigate();
@@ -26,9 +27,14 @@ function Main() {
     }
   };
 
-  const { data, isLoading, status } = useQuery(['umkm'], fetchUMKM);
+  const { data, isLoading, status, isFetching } = useQuery(['umkm'], fetchUMKM);
 
-  const { data: userData, refetch } = useQuery(
+  const {
+    data: userData,
+    refetch,
+    isSuccess,
+    isFetched,
+  } = useQuery(
     ['userDataNav'],
     async () => {
       const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
@@ -50,14 +56,22 @@ function Main() {
       if (user?.uid === 'ARZsztwYV0NjXxaAXMd6Hef8k5Z2') {
         return navigate('/admin');
       } else {
+        refetch();
         return navigate('/');
       }
     }
+    console.log(userData);
   }, [user, loading]);
 
-  if (isLoading) {
+  if (isSuccess) {
+    if (userData?.isBan === 1) {
+      return <BanNotif isOpen={true} />;
+    }
+  }
+  if (isFetching) {
     return <Loading />;
   }
+
   return (
     <Box pt={100} pb={10}>
       <Navbar
