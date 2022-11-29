@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Box, Button, Image, Text } from '@chakra-ui/react';
-import { doc, getDoc, query, where, collection } from 'firebase/firestore';
-import { db, storage } from '../../firebase-config';
+import {
+  doc,
+  getDoc,
+  query,
+  where,
+  collection,
+  getDocs,
+} from 'firebase/firestore';
+import { auth, db, storage } from '../../firebase-config';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import Checkout from './Checkout';
@@ -10,10 +17,12 @@ import { useQuery } from '@tanstack/react-query';
 import InfoTab from './InfoTab';
 import converter from './converter';
 import Loading from './Loading';
+import ReportModal from './ReportModal';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 function About() {
   let { id } = useParams();
-
+  const [user] = useAuthState(auth);
   const {
     data,
     isLoading,
@@ -29,6 +38,21 @@ function About() {
       console.log(err);
     }
   });
+  const { data: userData, isLoading: LoadUserData } = useQuery(
+    ['userDataAbout'],
+    async () => {
+      try {
+        const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
+        const doc = await getDocs(q);
+
+        return doc.docs[0].data();
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    { enabled: Boolean(user) }
+  );
+
   if (isFetching) {
     return <Loading />;
   }
@@ -72,6 +96,9 @@ function About() {
           <Text m={3} fontWeight='small'>
             {data?.deskripsi}
           </Text>
+        </Box>
+        <Box display='flex' justifyContent='end' p={3} px={5}>
+          <ReportModal user={userData} umkm={data} />
         </Box>
       </Box>
       <Box

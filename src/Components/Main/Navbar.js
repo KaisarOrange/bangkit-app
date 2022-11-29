@@ -47,9 +47,6 @@ function Navbar(props) {
     navigate('/main/card');
   };
 
-  useEffect(() => {
-    console.log(umkm?.imageUrl);
-  });
   return (
     <Flex
       bg='white'
