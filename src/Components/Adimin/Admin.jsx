@@ -1,4 +1,5 @@
 import { DeleteIcon } from '@chakra-ui/icons';
+import uniqid from 'uniqid';
 import {
   Avatar,
   Box,
@@ -33,6 +34,8 @@ function Admin() {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
 
+  const date = new Date();
+
   const kasus = [
     'Data Finansial UMKM direkayasa',
     'Pemilik tidak jujur',
@@ -57,45 +60,110 @@ function Admin() {
     }
   });
 
-  const banUser = async (user) => {
+  const { data: userData, refetch: refetchUser } = useQuery(
+    ['userDataAdmin'],
+    async () => {
+      const arr = [];
+      const q = query(collection(db, 'users'), where('isBan', '==', 1));
+
+      try {
+        const doc = await getDocs(q);
+        doc.forEach((doc) => {
+          arr.push(doc.data());
+        });
+        return arr;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  );
+
+  const {
+    data: umkm,
+    isSuccess,
+    refetch: refetchUmkm,
+  } = useQuery(
+    ['umkmAdmin'],
+    async () => {
+      const arr = [];
+      const q = query(collection(db, 'umkm'), where('late', '==', 1));
+
+      try {
+        const doc = await getDocs(q);
+        doc.forEach((doc) => {
+          arr.push(doc.data());
+        });
+        return arr;
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    {
+      enabled: Boolean(user),
+    }
+  );
+
+  const banUser = async (user, kasus) => {
+    const h = query(collection(db, 'report'), where('ownerId', '==', user));
+
+    const docb = await getDocs(h);
+    docb.forEach((doca) => {
+      updateDoc(doc(db, 'report', doca.id), {
+        isBan: 1,
+      });
+    });
+
     const q = query(collection(db, 'users'), where('uid', '==', user));
-    const h = query(collection(db, 'report'), where('userId', '==', user));
+
+    const e = query(collection(db, 'umkm'), where('ownerUid', '==', user));
+    const docc = await getDocs(e);
+    await updateDoc(doc(db, 'umkm', docc?.docs[0].id), {
+      isBan: 1,
+    });
 
     const doca = await getDocs(q);
 
-    const docb = await getDocs(h);
-    console.log(docb?.docs[0].id);
     await updateDoc(doc(db, 'users', doca?.docs[0].id), {
       isBan: 1,
     });
 
-    await updateDoc(doc(db, 'report', docb?.docs[0].id), {
-      isBan: 1,
-    });
     refetch();
+    refetchUser();
+    refetchUmkm();
   };
 
   const unBanUser = async (user) => {
     const q = query(collection(db, 'users'), where('uid', '==', user));
-    const h = query(collection(db, 'report'), where('userId', '==', user));
+
+    const h = query(collection(db, 'report'), where('ownerId', '==', user));
+
+    const docb = await getDocs(h);
+    docb.forEach((doca) => {
+      updateDoc(doc(db, 'report', doca.id), {
+        isBan: 0,
+      });
+    });
 
     const doca = await getDocs(q);
 
-    const docb = await getDocs(h);
-    console.log(docb?.docs[0].id);
     await updateDoc(doc(db, 'users', doca?.docs[0].id), {
       isBan: 0,
     });
 
-    await updateDoc(doc(db, 'report', docb?.docs[0].id), {
+    const e = query(collection(db, 'umkm'), where('ownerUid', '==', user));
+    const docc = await getDocs(e);
+    await updateDoc(doc(db, 'umkm', docc?.docs[0].id), {
       isBan: 0,
     });
+
     refetch();
+    refetchUser();
+    refetchUmkm();
   };
+  const banUsers = userData?.filter((e) => e.isBan === 1).map((e) => e.uid);
 
   useEffect(() => {
-    console.log(data);
-
+    console.log(banUsers);
     check();
   });
   return (
@@ -116,23 +184,25 @@ function Admin() {
         flexDirection='column'
         alignItems='center'
         bg='blue.100'
+        key={uniqid()}
       >
-        <Table variant='simple' color='black'>
-          <Thead>
-            <Tr>
+        <Table variant='simple' color='black' key={uniqid()}>
+          <Thead key={uniqid()}>
+            <Tr key={uniqid()}>
               <Th>Nama reported UMKM </Th>
+              <Th>Pemilik </Th>
               <Th>Dilapor oleh</Th>
               <Th>Kasus</Th>
               <Th></Th>
             </Tr>
           </Thead>
-          <Tbody color='teal'>
+          <Tbody color='teal' key={uniqid()}>
             {data
               ?.filter((e) => e.isBan !== 1)
               .map((e, index) => {
                 return (
-                  <Tr key={index} cursor='default'>
-                    <Td>
+                  <Tr key={uniqid()} cursor='default'>
+                    <Td key={uniqid()}>
                       <Box
                         fontWeight='semibold'
                         display='flex'
@@ -143,32 +213,33 @@ function Admin() {
                         {e.umkmName}
                       </Box>
                     </Td>
-                    <Td>
+                    <Td key={uniqid()}>
                       <Box
                         fontWeight='semibold'
                         display='flex'
                         alignItems='center'
                         gap={2}
+                        key={uniqid()}
                       >
                         {' '}
                         <Avatar src={e.userImage} />
                         {e.userName}
                       </Box>
                     </Td>
-                    <Td>
+                    <Td key={uniqid()}>
                       {e.reportedCase.map((e) => {
                         return (
-                          <Text fontWeight='semibold' m={1}>
+                          <Text key={uniqid()} fontWeight='semibold' m={1}>
                             {' '}
                             {kasus[e - 1]}
                           </Text>
                         );
                       })}
                     </Td>
-                    <Td>
+                    <Td key={uniqid()}>
                       <DeleteIcon
                         cursor='pointer'
-                        onClick={() => banUser(e.userId)}
+                        onClick={() => banUser(e.ownerId, 1)}
                       />
                     </Td>
                   </Tr>
@@ -177,8 +248,8 @@ function Admin() {
           </Tbody>
         </Table>
       </TableContainer>
-      <Text fontWeight='bold' mt={20} textAlign='center'>
-        UMKM gagal bayar
+      <Text fontWeight='bold' mt={20} textAlign='center' key={uniqid()}>
+        Umkm telat bayar
       </Text>
       <TableContainer
         w='80vw'
@@ -191,59 +262,53 @@ function Admin() {
         display='flex'
         flexDirection='column'
         alignItems='center'
+        key={uniqid()}
       >
-        <Table variant='simple'>
-          <Thead>
-            <Tr>
-              <Th>Nama reported UMKM </Th>
-              <Th>Dilapor oleh</Th>
-              <Th>Kasus</Th>
+        <Table variant='simple' key={uniqid()}>
+          <Thead key={uniqid()}>
+            <Tr key={uniqid()}>
+              <Th>Nama UMKM </Th>
+              <Th>pemilik</Th>
+              <Th>Telat</Th>
               <Th></Th>
             </Tr>
           </Thead>
-          <Tbody color='teal'>
-            {data
-              ?.filter((e) => e.isBan === 1)
+          <Tbody color='teal ' key={uniqid()}>
+            {umkm
+              ?.filter((e) => e.late === 1 && e.isBan !== 1)
               .map((e, index) => {
                 return (
-                  <Tr key={index} cursor='default'>
-                    <Td>
+                  <Tr key={uniqid()} cursor='default'>
+                    <Td key={uniqid()}>
                       <Box
                         fontWeight='semibold'
                         display='flex'
                         alignItems='center'
                         gap={2}
+                        key={uniqid()}
                       >
-                        <Avatar src={e.umkmImage} />
-                        {e.umkmName}
+                        <Avatar src={e.imageUrl} />
+                        {e.nama}
                       </Box>
                     </Td>
-                    <Td>
+                    <Td key={uniqid()}>
                       <Box
                         fontWeight='semibold'
                         display='flex'
                         alignItems='center'
                         gap={2}
+                        key={uniqid()}
                       >
                         {' '}
-                        <Avatar src={e.userImage} />
-                        {e.userName}
+                        <Avatar src={e.ownerPhoto} />
+                        {e.ownerName}
                       </Box>
                     </Td>
-                    <Td>
-                      {e.reportedCase.map((e) => {
-                        return (
-                          <Text fontWeight='semibold' m={1}>
-                            {' '}
-                            {kasus[e - 1]}
-                          </Text>
-                        );
-                      })}
-                    </Td>
-                    <Td>
+                    <Td key={uniqid()}>{date.getDate()}</Td>
+                    <Td key={uniqid()}>
                       <DeleteIcon
                         cursor='pointer'
-                        onClick={() => unBanUser(e.userId)}
+                        onClick={() => banUser(e.ownerUid)}
                       />
                     </Td>
                   </Tr>
@@ -267,10 +332,11 @@ function Admin() {
         flexDirection='column'
         alignItems='center'
         mb={20}
+        key={uniqid()}
       >
-        <Table variant='simple'>
-          <Thead>
-            <Tr>
+        <Table variant='simple' key={uniqid()}>
+          <Thead key={uniqid()}>
+            <Tr key={uniqid()}>
               <Th>Nama reported UMKM </Th>
               <Th>Dilapor oleh</Th>
               <Th>Kasus</Th>
@@ -278,48 +344,27 @@ function Admin() {
             </Tr>
           </Thead>
           <Tbody color='teal'>
-            {data
+            {userData
               ?.filter((e) => e.isBan === 1)
               .map((e, index) => {
                 return (
-                  <Tr key={index} cursor='default'>
-                    <Td>
+                  <Tr key={uniqid()} cursor='default'>
+                    <Td key={uniqid()}>
                       <Box
                         fontWeight='semibold'
                         display='flex'
                         alignItems='center'
                         gap={2}
+                        key={uniqid()}
                       >
-                        <Avatar src={e.umkmImage} />
-                        {e.umkmName}
+                        <Avatar src={e.picture} />
+                        {e.name}
                       </Box>
                     </Td>
-                    <Td>
-                      <Box
-                        fontWeight='semibold'
-                        display='flex'
-                        alignItems='center'
-                        gap={2}
-                      >
-                        {' '}
-                        <Avatar src={e.userImage} />
-                        {e.userName}
-                      </Box>
-                    </Td>
-                    <Td>
-                      {e.reportedCase.map((e) => {
-                        return (
-                          <Text fontWeight='semibold' m={1}>
-                            {' '}
-                            {kasus[e - 1]}
-                          </Text>
-                        );
-                      })}
-                    </Td>
-                    <Td>
+                    <Td key={uniqid()}>
                       <DeleteIcon
                         cursor='pointer'
-                        onClick={() => unBanUser(e.userId)}
+                        onClick={() => unBanUser(e.uid)}
                       />
                     </Td>
                   </Tr>

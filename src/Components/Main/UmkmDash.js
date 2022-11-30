@@ -1,5 +1,6 @@
 import { Avatar, Box, Button, Image, Stack, Text } from '@chakra-ui/react';
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
@@ -83,7 +84,9 @@ function UmkmDash() {
 
     if (dDay.getTime() > paymentDate.getTime()) {
       if (umkm?.hasPay === 0) {
-        return console.log('you naughty');
+        await updateDoc(doc(db, 'umkm', umkm?.umkmId), {
+          late: 1,
+        });
       } else {
         await updateDoc(doc(db, 'umkm', umkm?.umkmId), {
           hasPay: 0,
@@ -249,11 +252,10 @@ function UmkmDash() {
           return <Box key={index}>{e.email}</Box>;
         })}
       </Stack>
-      <Button ml={700} onClick={() => refetch()}>
-        Umkm
-      </Button>
     </Box>
   );
 }
 
 export default UmkmDash;
+
+//  <Button ml={700} onClick={() => {}}>Umkm</Button>

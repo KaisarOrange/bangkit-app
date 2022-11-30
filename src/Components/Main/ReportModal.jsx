@@ -37,6 +37,7 @@ function ReportModal({ user, umkm }) {
       umkmName: umkm?.nama,
       umkmImage: umkm?.imageUrl,
       reportedCase: value,
+      ownerId: umkm?.ownerUid,
     });
   };
 
