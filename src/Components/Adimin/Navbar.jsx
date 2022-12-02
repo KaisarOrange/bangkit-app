@@ -40,10 +40,18 @@ function Navbar(props) {
         </Link>
       </Box>
       <Box display='flex' gap={5} m='auto'>
-        <Button bg='transparent' fontWeight='semibold'>
+        <Button
+          bg='transparent'
+          fontWeight='semibold'
+          onClick={() => props.setPage(1)}
+        >
           Validasi Umkm
         </Button>{' '}
-        <Button bg='transparent' fontWeight='semibold'>
+        <Button
+          bg='transparent'
+          fontWeight='semibold'
+          onClick={() => props.setPage(0)}
+        >
           Reported UMKM
         </Button>
       </Box>
