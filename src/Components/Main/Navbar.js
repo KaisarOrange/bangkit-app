@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-import { logout, db, auth } from '../../firebase-config';
-import { query, collection, getDocs, where, getDoc } from 'firebase/firestore';
+import { db, auth } from '../../firebase-config';
+import { query, collection, getDocs, where } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Flex,
@@ -8,16 +7,12 @@ import {
   Box,
   Spacer,
   Input,
-  Button,
   Text,
   Avatar,
 } from '@chakra-ui/react';
 import logo from '../../img/logo.png';
-import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-
-import DrawerExample from './Drawer';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 function Navbar(props) {
   const navigate = useNavigate();
@@ -41,6 +36,23 @@ function Navbar(props) {
       enabled: Boolean(user),
     }
   );
+  const { data: userData } = useQuery(
+    ['userDataPorto'],
+    async () => {
+      try {
+        const q = query(collection(db, 'users'), where('uid', '==', user?.uid));
+        const doc = await getDocs(q);
+
+        return doc.docs[0].data();
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    { enabled: Boolean(user) },
+    {
+      refetchInterval: 1000,
+    }
+  );
 
   const submit = (element) => {
     element.preventDefault();
@@ -52,7 +64,8 @@ function Navbar(props) {
       bg='white'
       position='fixed'
       w='100%'
-      padding={5}
+      px={{ base: 2, lg: 5 }}
+      py={5}
       boxShadow='md'
       justifyContent='center'
       alignItems='center'
@@ -61,34 +74,49 @@ function Navbar(props) {
     >
       <Box>
         <Link to='/main/card' onClick={() => props.setFilterUmkm('')}>
-          <Image cursor='pointer' w='10rem' src={logo} />{' '}
+          <Image cursor='pointer' w={{ base: 150 }} src={logo} />{' '}
         </Link>
       </Box>
       <Spacer />
-      <Box>
+      <Box boxShadow='sm'>
         <form onSubmit={submit}>
           <Input
             onChange={(event) => props.setFilterUmkm(event.target.value)}
             value={props.filterUmkm}
-            w='50vw'
+            w={{ base: '50vw', lg: '50vw' }}
+            h={{ base: 8, lg: 10 }}
+            mx={2}
             placeholder='Ketoprak'
           ></Input>
         </form>
       </Box>
       <Spacer />
       <Box
-        mr={10}
+        mr={{ base: 0, lg: 10 }}
         display='flex'
         justifyContent='center'
         alignItems='center'
-        gap={5}
+        gap={[2, 5]}
       >
-        <Text fontWeight='medium'>Selamat datang, {props.name}! </Text>
-        <Link to='umkm-dashboard'>
-          <Avatar size='lg' bg='gray' name='U M' src={umkm?.imageUrl} />
-        </Link>
+        <Text
+          display={{ base: 'none', lg: 'inline' }}
+          fontSize={[8, 14]}
+          fontWeight='medium'
+        >
+          Selamat datang, {userData?.name}!{' '}
+        </Text>
         <Link to='/main/portofolio'>
-          <Avatar size='lg' src={props.image} />
+          <Avatar size={{ base: 'sm', lg: 'lg' }} src={userData?.picture} />
+        </Link>
+        <Link
+          to={userData?.isUMKM === '1' ? 'umkm-dashboard' : '/registerUMKM'}
+        >
+          <Avatar
+            size={{ base: 'sm', lg: 'lg' }}
+            bg='gray'
+            name='U M'
+            src={umkm?.imageUrl}
+          />
         </Link>
       </Box>
     </Flex>

@@ -34,6 +34,7 @@ function AlertDialogExample({
         disabled={datea.getTime() > canPay || hasPay === 1}
         colorScheme='teal'
         onClick={onOpen}
+        size={{ base: 'sm', lg: 'md' }}
       >
         {BtnText}
       </Button>

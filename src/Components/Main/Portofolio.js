@@ -38,11 +38,7 @@ function Portofolio() {
     navigate('/');
   };
 
-  const {
-    data: userData,
-    isLoading: LoadUserData,
-    isFetching,
-  } = useQuery(
+  const { data: userData } = useQuery(
     ['userDataPorto'],
     async () => {
       try {

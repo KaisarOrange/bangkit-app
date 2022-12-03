@@ -28,9 +28,9 @@ function Card(props) {
       mt={20}
       ml='auto'
       mr='auto'
-      w='50vh'
+      w={{ base: '30vh', lg: '50vh' }}
       display='grid'
-      gridTemplate='auto /1fr 1fr 1fr 1fr'
+      gridTemplate={{ base: '1fr 1fr/ auto', lg: 'auto /1fr 1fr 1fr 1fr' }}
       gap='16'
       justifyContent='center'
     >
@@ -49,11 +49,11 @@ function Card(props) {
               <Box
                 onClick={() => navigate(`/main/${element.id}`)}
                 className='Card'
-                h={450}
+                h={{ base: 410, lg: 450 }}
                 display='flex'
                 flexDirection='column'
                 justifyContent='center'
-                w='300px'
+                w={{ base: 260, lg: 300 }}
                 rounded='20px'
                 overflow='hidden'
                 boxShadow='md'
@@ -77,10 +77,10 @@ function Card(props) {
                     <Avatar size='sm' src={element.ownerPhoto} />
                     <Text>{element.ownerName}</Text>
                   </Box>
-                  <Text mt={1} fontWeight='small'>
+                  <Text mt={[0, 1]} fontWeight='small'>
                     {element.deskripsi}
                   </Text>
-                  <Box color='teal' gap={2} display='flex'>
+                  <Box color='teal' gap={[0, 2]} display='flex'>
                     <Text fontWeight='semibold'>Bunga {element.bunga} % </Text>
                     <Text fontWeight='semibold'>
                       {' '}
@@ -88,7 +88,7 @@ function Card(props) {
                     </Text>
                   </Box>
 
-                  <Box mt={3} bg='white'>
+                  <Box mt={[0, 3]} bg='white'>
                     <Box
                       rounded='md'
                       bg='#14BBC6'

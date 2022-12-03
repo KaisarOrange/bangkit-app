@@ -115,7 +115,10 @@ function ReportModal({ user, umkm }) {
               disabled={value.length < 1}
               colorScheme='red'
               mr={3}
-              onClick={submit}
+              onClick={() => {
+                submit();
+                onClose();
+              }}
             >
               Lapor
             </Button>

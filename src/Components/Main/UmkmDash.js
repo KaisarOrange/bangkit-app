@@ -124,6 +124,7 @@ function UmkmDash() {
     const doca = await getDocs(q);
 
     const second = async (e) => {
+      //delete name: e.name on line 131
       console.log(e);
       try {
         await updateDoc(doc(db, 'users', doca?.docs[0].id), {
@@ -144,23 +145,32 @@ function UmkmDash() {
   });
   return (
     <Box>
-      <Box display='flex' alignItems='center' justifyContent='center'>
+      <Box
+        display='flex'
+        alignItems='center'
+        justifyContent={{ base: 'center', lg: 'center' }}
+      >
         <Box
-          h={600}
+          h={{ base: 400, lg: 600 }}
           display='flex'
           flexDirection='column'
           justifyContent='center'
-          w='45vw'
+          w={{ base: '65vw', lg: '45vw' }}
           rounded='20px'
           overflow='hidden'
           boxShadow='md'
           bg='gray.100'
           fontSize='14px'
           fontFamily='helvetica'
-          mt={10}
+          mt={{ base: 160, lg: 10 }}
         >
           <Box>
-            <Image m={0} h='400px' w='100vh' src={umkm?.imageUrl} />
+            <Image
+              m={0}
+              h={{ base: '200px', lg: '400px' }}
+              w='100vh'
+              src={umkm?.imageUrl}
+            />
           </Box>
           <Box
             display='flex'
@@ -180,37 +190,51 @@ function UmkmDash() {
         </Box>
         <Box
           position='fixed'
-          right={10}
-          top='35vh'
+          right={{ base: 0, lg: 0 }}
+          left={{ base: 0, lg: 1200 }}
+          top={{ base: '12vh', lg: '35vh' }}
           mr={6}
-          display='flex'
+          display={{ base: 'flex' }}
           flexDirection='column'
           bg='gray.100'
           p={25}
-          w={280}
+          w={{ base: 'full', lg: 280 }}
           gap={5}
           justifyContent='center'
           textAlign='center'
           rounded='md'
           boxShadow='sm'
         >
-          <Box display='flex' alignItems='center'>
-            <Text textAlign='start' fontWeight='semibold'>
+          <Box display={{ base: 'none', lg: 'inline' }} alignItems='center'>
+            <Text textAlign='center ' fontWeight='semibold'>
               Jatuh tempo pembayaran
             </Text>
           </Box>
           <Box>
-            <Text color='teal' fontWeight='bold' fontSize='1.2rem'>
+            <Text
+              color='teal'
+              fontWeight='bold'
+              fontSize={{ base: '0.72rem', lg: '1.2rem' }}
+            >
               {paymentDate.getDate()} {month(paymentDate.getMonth())}{' '}
               {paymentDate.getFullYear()}
             </Text>
           </Box>
           <Box>
-            <Text textAlign='start' fontWeight='semibold'>
+            <Text
+              display={{ base: 'none', lg: 'inline' }}
+              textAlign='center'
+              fontWeight='semibold'
+            >
               Bunga yang harus dibayar
             </Text>
 
-            <Box mt={5} color='teal' fontWeight='bold' fontSize='1.2rem'>
+            <Box
+              mt={0}
+              color='teal'
+              fontWeight='bold'
+              fontSize={{ base: '0.72rem', lg: '1.2rem' }}
+            >
               {umkm?.hasPay !== 0 ? (
                 'Lunas 😁👍'
               ) : (
