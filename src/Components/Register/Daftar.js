@@ -6,14 +6,14 @@ import {
   Image,
   Fade,
   useDisclosure,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { auth, db } from "../../firebase-config";
-import logo from "../../img/logo.png";
-import Side from "./Side";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+} from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { auth, db } from '../../firebase-config';
+import logo from '../../img/logo.png';
+import Side from './Side';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import {
   getFirestore,
   query,
@@ -21,25 +21,24 @@ import {
   collection,
   where,
   addDoc,
-} from "firebase/firestore";
-import Auth from "./Auth";
+} from 'firebase/firestore';
+import Auth from './Auth';
 
 function Daftar() {
   const [user, loading, error] = useAuthState(auth);
   const [page, setPage] = useState(0);
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    name: "",
-    saldo: 0,
-    imageProfile: "",
-    isUMKM: "0",
-    isInvestor: "0",
-    imageUrl: "",
+    email: '',
+    password: '',
+    name: '',
+    imageProfile: '',
+    isUMKM: '0',
+    isInvestor: '0',
+    imageUrl: '',
   });
   const navigate = useNavigate();
 
-  const FormTitles = ["Siapakah kamu?", "Sign Up"];
+  const FormTitles = ['Siapakah kamu?', 'Sign Up'];
 
   const PageDisplay = () => {
     if (page === 0) {
@@ -64,12 +63,13 @@ function Daftar() {
     picture,
     isInvestor,
     isUMKM,
-    invested
+    invested,
+    saldo
   ) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const user = res.user;
-      await addDoc(collection(db, "users"), {
+      await addDoc(collection(db, 'users'), {
         uid: user.uid,
         name,
         email,
@@ -77,12 +77,13 @@ function Daftar() {
         isInvestor,
         isUMKM,
         invested,
+        saldo,
       });
 
-      if (formData.isUMKM === "1") {
-        navigate("/registerUMKM");
+      if (formData.isUMKM === '1') {
+        navigate('/registerUMKM');
       } else {
-        navigate("/main/card");
+        navigate('/main/card');
       }
     } catch (err) {
       console.error(err);
@@ -92,7 +93,7 @@ function Daftar() {
 
   useEffect(() => {
     if (loading) return;
-    if (user) return navigate("/main/card");
+    if (user) return navigate('/main/card');
   });
 
   return (
@@ -100,38 +101,38 @@ function Daftar() {
       <Box></Box>
       <Box
         pb={10}
-        m="auto"
+        m='auto'
         w={350}
         h={600}
-        bg="gray.200"
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        rounded="md"
-        boxShadow="sm"
+        bg='gray.200'
+        display='flex'
+        flexDirection='column'
+        justifyContent='center'
+        alignItems='center'
+        rounded='md'
+        boxShadow='sm'
       >
-        <Stack textAlign="center" spacing={5} mt={8} mb={5}>
-          <Image m="auto" w="10rem" src={logo} />
-          <Text fontWeight="bold" as="h1">
+        <Stack textAlign='center' spacing={5} mt={8} mb={5}>
+          <Image m='auto' w='10rem' src={logo} />
+          <Text fontWeight='bold' as='h1'>
             {FormTitles[page]}
           </Text>
         </Stack>
         <Box w={250} h={300}>
           {PageDisplay()}
         </Box>
-        <Box mt={10} as="footer">
+        <Box mt={10} as='footer'>
           <Button
-            size="sm"
-            bg="transparent"
+            size='sm'
+            bg='transparent'
             disabled={page == 0}
             onClick={() => setPage((curr) => curr - 1)}
           >
             Kembali
           </Button>
           <Button
-            size="sm"
-            bg="transparent"
+            size='sm'
+            bg='transparent'
             disabled={page == 0}
             onClick={() => {
               if (page === FormTitles.length - 1) {
@@ -143,17 +144,18 @@ function Daftar() {
                     formData.imageUrl,
                     formData.isInvestor,
                     formData.isUMKM,
-                    []
+                    [],
+                    0
                   );
                 } catch (err) {
-                  alert("hello");
+                  alert('hello');
                 }
               } else {
                 setPage((curr) => curr - 1);
               }
             }}
           >
-            {page === FormTitles.length - 1 ? "Submit" : "Selanjutnya"}
+            {page === FormTitles.length - 1 ? 'Submit' : 'Selanjutnya'}
           </Button>
         </Box>
       </Box>

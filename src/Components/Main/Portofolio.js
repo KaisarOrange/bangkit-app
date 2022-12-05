@@ -38,7 +38,7 @@ function Portofolio() {
     navigate('/');
   };
 
-  const { data: userData } = useQuery(
+  const { data: userData, refetch } = useQuery(
     ['userDataPorto'],
     async () => {
       try {
@@ -50,13 +50,15 @@ function Portofolio() {
         console.error(err);
       }
     },
-    { enabled: Boolean(user) },
-    {
-      refetchInterval: 1000,
-    }
+    { enabled: Boolean(user) }
   );
 
-  const { data: umkmData, isLoading } = useQuery(
+  const {
+    data: umkmData,
+    isLoading,
+    isFetching,
+    refetch: umkmRefetch,
+  } = useQuery(
     ['umkmDataPorto'],
     async () => {
       return Promise.all(
@@ -67,7 +69,9 @@ function Portofolio() {
     },
     { enabled: Boolean(userData) }
   );
-  if (isLoading) {
+  if (isFetching) {
+    refetch();
+    umkmRefetch();
     return <Loading />;
   }
   return (

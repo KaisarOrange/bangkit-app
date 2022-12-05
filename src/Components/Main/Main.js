@@ -51,6 +51,7 @@ function Main() {
   );
 
   useEffect(() => {
+    //logout();
     if (loading) return;
     if (!user || user?.uid === 'ARZsztwYV0NjXxaAXMd6Hef8k5Z2') {
       if (user?.uid === 'ARZsztwYV0NjXxaAXMd6Hef8k5Z2') {

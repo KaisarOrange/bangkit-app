@@ -136,8 +136,8 @@ function Checkout({ id, refetchUmkm }) {
     };
     await updateDoc(umkmDoc, newField);
     await updateDoc(userDoc, newUserField);
-    //window.location.reload();
-    refetchUmkm();
+    window.location.reload();
+    //refetchUmkm();
   };
 
   return (
@@ -169,11 +169,6 @@ function Checkout({ id, refetchUmkm }) {
               <Button type='submit' colorScheme='blue' mr={3} onClick={onClose}>
                 Invest
               </Button>
-              <Button
-                onClick={() => {
-                  console.log(userData.id);
-                }}
-              ></Button>
             </ModalFooter>
           </form>
         </ModalContent>
