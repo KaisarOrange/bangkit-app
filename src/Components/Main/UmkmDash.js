@@ -16,12 +16,13 @@ import UpdateModal from './UpdateModal';
 import { useQuery } from '@tanstack/react-query';
 import Loading from './Loading';
 import AlertDialogExample from './Dialogue';
-import converter from './converter';
+import converter from './fun/converter';
 import month from './getMonth';
+import updateJatuhTempo from './fun/updateJatuhTempo';
+import PayDebtModal from './PayDebtModal';
 
 function UmkmDash() {
   const [user] = useAuthState(auth);
-
   const {
     data: umkm,
     refetch,
@@ -69,35 +70,27 @@ function UmkmDash() {
     { enabled: Boolean(umkm) }
   );
 
-  //Payment interest due date
+  const updateInvestor = async (e) => {
+    const q = query(collection(db, 'users'), where('uid', '==', e.uid));
+
+    const doca = await getDocs(q);
+
+    const second = async (e) => {
+      try {
+        await updateDoc(doc(db, 'users', doca?.docs[0].id), {
+          invested: e.invested,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    second(e);
+  };
+
   const canPayDate = new Date();
   const dDay = new Date();
   const paymentDate = new Date(umkm?.date.seconds * 1000);
   canPayDate.setDate(canPayDate.getDate() + 7);
-
-  const updateJatuhTempo = async () => {
-    const setNextPaymentDate = () => {
-      const nextPaymentDate = paymentDate;
-      nextPaymentDate.setDate(nextPaymentDate.getDate() + umkm?.angsuran * 30);
-      return nextPaymentDate;
-    };
-
-    if (dDay.getTime() > paymentDate.getTime()) {
-      if (umkm?.hasPay === 0) {
-        await updateDoc(doc(db, 'umkm', umkm?.umkmId), {
-          late: 1,
-        });
-      } else {
-        await updateDoc(doc(db, 'umkm', umkm?.umkmId), {
-          hasPay: 0,
-          date: setNextPaymentDate(),
-        });
-      }
-      refetch();
-    } else {
-      console.log('fail or either you paid');
-    }
-  };
 
   const bayar = async () => {
     const userPay = userInfo?.map((e) =>
@@ -118,51 +111,70 @@ function UmkmDash() {
     refetch();
   };
 
-  const updateInvestor = async (e) => {
-    const q = query(collection(db, 'users'), where('uid', '==', e.uid));
-
+  const updateSaldo = async (e, newSaldo) => {
+    console.log(newSaldo);
+    const q = query(collection(db, 'users'), where('uid', '==', e.investorId));
+    console.log(userInfo[0].saldo);
     const doca = await getDocs(q);
+    await updateDoc(doc(db, 'users', doca?.docs[0].id), {
+      saldo: userInfo[0].saldo + Number(newSaldo),
+    });
+  };
 
-    const second = async (e) => {
-      //delete name: e.name on line 131
-      console.log(e);
-      try {
-        await updateDoc(doc(db, 'users', doca?.docs[0].id), {
-          name: e.name,
-          invested: e.invested,
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    second(e);
+  const bayarHutang = async (amountPaid) => {
+    const userPay = userInfo?.map((e) =>
+      e.invested.filter((e) => e.umkmId === umkm.umkmId)
+    );
+    userPay
+      .map((e) => e[0])
+      .map((e) => {
+        updateSaldo(
+          e,
+          amountPaid * (e.investedAmount / umkm?.danaRecieved),
+          userInfo
+        );
+        e.investedAmount =
+          e.investedAmount -
+          amountPaid * (e.investedAmount / umkm?.danaRecieved);
+      });
+
+    userInfo?.forEach((e) => {
+      updateInvestor(e);
+    });
+    await updateDoc(doc(db, 'umkm', umkm.umkmId), {
+      danaRecieved: umkm?.danaRecieved - amountPaid,
+    });
+    // await updateDoc(doc(db, 'umkm', umkm.umkmId), { hasPay: 1,});
+    refetch();
   };
 
   useEffect(() => {
     if (isSuccess === true) {
-      updateJatuhTempo();
+      updateJatuhTempo(umkm, refetch, dDay, paymentDate);
     }
   });
   return (
-    <Box>
+    <Stack justifyContent='center' alignItems='center'>
       <Box
         display='flex'
         alignItems='center'
         justifyContent={{ base: 'center', lg: 'center' }}
+        flexDirection='column'
       >
         <Box
           h={{ base: 400, lg: 600 }}
+          w={{ base: '65vw', lg: '45vw' }}
+          mt={{ base: 0, lg: 10 }}
+          mb={{ base: 10 }}
           display='flex'
           flexDirection='column'
           justifyContent='center'
-          w={{ base: '65vw', lg: '45vw' }}
           rounded='20px'
-          overflow='hidden'
           boxShadow='md'
+          overflow='hidden'
           bg='gray.100'
           fontSize='14px'
           fontFamily='helvetica'
-          mt={{ base: 160, lg: 10 }}
         >
           <Box>
             <Image
@@ -189,23 +201,22 @@ function UmkmDash() {
           <UpdateModal id={umkm?.umkmId} refetch={refetch} />
         </Box>
         <Box
-          position='fixed'
+          position={{ base: '-moz-initial', lg: 'fixed' }}
           right={{ base: 0, lg: 0 }}
           left={{ base: 0, lg: 1200 }}
           top={{ base: '12vh', lg: '35vh' }}
-          mr={6}
-          display={{ base: 'flex' }}
+          display='flex'
           flexDirection='column'
           bg='gray.100'
           p={25}
-          w={{ base: 'full', lg: 280 }}
+          w={{ base: '80vw', lg: 280 }}
           gap={5}
           justifyContent='center'
           textAlign='center'
           rounded='md'
           boxShadow='sm'
         >
-          <Box display={{ base: 'none', lg: 'inline' }} alignItems='center'>
+          <Box alignItems='center'>
             <Text textAlign='center ' fontWeight='semibold'>
               Jatuh tempo pembayaran
             </Text>
@@ -214,18 +225,14 @@ function UmkmDash() {
             <Text
               color='teal'
               fontWeight='bold'
-              fontSize={{ base: '0.72rem', lg: '1.2rem' }}
+              fontSize={{ base: '1rem', lg: '1.2rem' }}
             >
               {paymentDate.getDate()} {month(paymentDate.getMonth())}{' '}
               {paymentDate.getFullYear()}
             </Text>
           </Box>
           <Box>
-            <Text
-              display={{ base: 'none', lg: 'inline' }}
-              textAlign='center'
-              fontWeight='semibold'
-            >
+            <Text textAlign='center' fontWeight='semibold'>
               Bunga yang harus dibayar
             </Text>
 
@@ -233,7 +240,7 @@ function UmkmDash() {
               mt={0}
               color='teal'
               fontWeight='bold'
-              fontSize={{ base: '0.72rem', lg: '1.2rem' }}
+              fontSize={{ base: '1rem', lg: '1.2rem' }}
             >
               {umkm?.hasPay !== 0 ? (
                 'Lunas 😁👍'
@@ -271,12 +278,35 @@ function UmkmDash() {
           />
         </Box>
       </Box>
-      <Stack mt={20} justifyContent='center' alignItems='center'>
-        {userInfo?.map((e, index) => {
-          return <Box key={index}>{e.email}</Box>;
-        })}
-      </Stack>
-    </Box>
+      <Box
+        rounded='20px'
+        boxShadow='md'
+        display='flex'
+        alignItems='center'
+        w={{ base: '65vw', lg: '45vw' }}
+        bg='gray.100'
+        mt={0}
+        p={15}
+        py={10}
+        flexDirection='column'
+        gap={4}
+      >
+        <Text fontWeight='bold' fontSize='lg'>
+          Dana yang diterima
+        </Text>
+        <Text fontSize='2xl' fontWeight='bold' color='teal'>
+          Rp. {converter(umkm?.danaRecieved)}
+        </Text>
+        <Box bg='white' w='60vh' rounded='md' overflow='hidden'>
+          <Box
+            bg='#14BBC6'
+            w={(umkm?.danaRecieved / umkm?.dana) * 100 + '%'}
+            h={4}
+          ></Box>
+        </Box>
+        <PayDebtModal bayarHutang={bayarHutang} />
+      </Box>
+    </Stack>
   );
 }
 

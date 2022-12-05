@@ -5,6 +5,7 @@ import { useOutletContext } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Cardd from '../../styles/Card.css';
 import { useQuery } from '@tanstack/react-query';
+import convert from './fun/converter';
 
 function Card(props) {
   let navigate = useNavigate();
@@ -15,10 +16,6 @@ function Card(props) {
 
   const { data, isLoading } = useQuery(['card'], fetchUMKM);
 
-  const convert = (n) => {
-    const a = parseInt(n);
-    return a.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  };
   if (isLoading) {
     return <h1>Loading...</h1>;
   }

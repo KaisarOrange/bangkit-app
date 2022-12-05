@@ -15,11 +15,9 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  arrayUnion,
   collection,
-  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -30,7 +28,6 @@ import {
 import { auth, db } from '../../firebase-config';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useQuery } from '@tanstack/react-query';
-import { ref } from 'firebase/storage';
 
 function Checkout({ id, refetchUmkm }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -111,10 +108,12 @@ function Checkout({ id, refetchUmkm }) {
         umkmId: id,
         investedAmount: invest,
         profit: 0,
+        investorId: user.uid,
       });
     } else {
       investor[index] = {
         umkmId: id,
+        investorId: user.uid,
         investedAmount: userData.invested[index].investedAmount + invest,
         profit: userData.invested[index].profit,
       };

@@ -16,7 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, db, logout } from '../../firebase-config';
 import { useQuery } from '@tanstack/react-query';
-import converter from './converter';
+import converter from './fun/converter';
 import {
   collection,
   doc,
@@ -71,15 +71,15 @@ function Portofolio() {
     return <Loading />;
   }
   return (
-    <Box mt={70}>
-      <Text m={7} as='h1' fontSize='1.5rem' textAlign='center'>
+    <Box mt={35}>
+      <Text m={4} as='h1' fontSize='1.5rem' textAlign='center'>
         Portofolio
       </Text>
       <Box
         display='flex'
         gap={5}
         flexDirection='column'
-        w='50vw'
+        w={{ base: '80vw', lg: '50vw' }}
         m='auto'
         bg='rgba(75, 192, 192, 0.2)'
         pl={12}
@@ -103,7 +103,7 @@ function Portofolio() {
         <Box display='flex' justifyContent='space-between'>
           <Box>
             <Text>Saldo</Text>
-            <Text>Rp. 0</Text>
+            <Text>Rp. {converter(userData?.saldo)}</Text>
           </Box>
           <Box>
             <Text>Imbal Hasil</Text>
@@ -121,7 +121,7 @@ function Portofolio() {
         </Box>
       </Box>
       <TableContainer
-        w='50vw'
+        w={{ base: '80vw', lg: '50vw' }}
         rounded='md'
         bg='gray.100'
         m='auto'
@@ -132,7 +132,7 @@ function Portofolio() {
         flexDirection='column'
         alignItems='center'
       >
-        <Table variant='simple'>
+        <Table variant='simple' size={{ base: 'sm', lg: 'md' }}>
           <Thead>
             <Tr>
               <Th>Nama UMKM</Th>
@@ -169,9 +169,6 @@ function Portofolio() {
                     <Td isNumeric>
                       Rp. {converter(userData?.invested[index].profit)}
                     </Td>
-                    <Td>
-                      <DeleteIcon cursor='pointer' />
-                    </Td>
                   </Tr>
                 );
               })
@@ -196,4 +193,7 @@ function Portofolio() {
 
 export default Portofolio;
 /*
+ <Td>
+ <DeleteIcon cursor='pointer' />
+   </Td>
  */

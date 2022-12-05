@@ -15,7 +15,7 @@ import Checkout from './Checkout';
 import { useQuery } from '@tanstack/react-query';
 
 import InfoTab from './InfoTab';
-import converter from './converter';
+import converter from './fun/converter';
 import Loading from './Loading';
 import ReportModal from './ReportModal';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -67,21 +67,26 @@ function About() {
       gap={10}
     >
       <Box
-        h={600}
+        h={{ base: 400, lg: 600 }}
+        w={{ base: '65vw', lg: '45vw' }}
+        mt={{ base: 0, lg: 10 }}
         display='flex'
         flexDirection='column'
         justifyContent='center'
-        w='45vw'
         rounded='20px'
         overflow='hidden'
         boxShadow='md'
         bg='gray.100'
         fontSize='14px'
         fontFamily='helvetica'
-        mt={50}
       >
         <Box>
-          <Image m={0} h='400px' w='100vh' src={data?.imageUrl} />
+          <Image
+            m={0}
+            h={{ base: '200px', lg: '400px' }}
+            w='100vh'
+            src={data?.imageUrl}
+          />
         </Box>
         <Box
           display='flex'
@@ -102,15 +107,14 @@ function About() {
         </Box>
       </Box>
       <Box
-        position='fixed'
+        position={{ base: '-moz-initial', lg: 'fixed' }}
         right={10}
-        top='35vh'
-        mr={6}
+        top={{ base: '12vh', lg: '35vh' }}
         display='flex'
         flexDirection='column'
         bg='gray.100'
         p={25}
-        w={280}
+        w={{ base: '80%', lg: 280 }}
         gap={5}
         justifyContent='center'
         textAlign='center'
@@ -134,7 +138,7 @@ function About() {
 
         <Checkout refetchUmkm={refetchUmkm} id={id} />
       </Box>
-      <Box w='100vh'>
+      <Box w={{ base: '80vw', lg: '100vh' }}>
         <InfoTab umkm={data} />
       </Box>
     </Box>
