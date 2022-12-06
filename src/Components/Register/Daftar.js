@@ -35,6 +35,7 @@ function Daftar() {
     isUMKM: '0',
     isInvestor: '0',
     imageUrl: '',
+    phone: 0,
   });
   const navigate = useNavigate();
 
@@ -64,7 +65,8 @@ function Daftar() {
     isInvestor,
     isUMKM,
     invested,
-    saldo
+    saldo,
+    phone
   ) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -78,6 +80,7 @@ function Daftar() {
         isUMKM,
         invested,
         saldo,
+        phone,
       });
 
       if (formData.isUMKM === '1') {
@@ -121,7 +124,7 @@ function Daftar() {
         <Box w={250} h={300}>
           {PageDisplay()}
         </Box>
-        <Box mt={10} as='footer'>
+        <Box mt={16} as='footer'>
           <Button
             size='sm'
             bg='transparent'
@@ -145,7 +148,8 @@ function Daftar() {
                     formData.isInvestor,
                     formData.isUMKM,
                     [],
-                    0
+                    0,
+                    formData.phone
                   );
                 } catch (err) {
                   alert('hello');

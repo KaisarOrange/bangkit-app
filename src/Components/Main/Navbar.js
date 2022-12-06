@@ -9,6 +9,8 @@ import {
   Input,
   Text,
   Avatar,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 import logo from '../../img/logo.png';
 import { useAuthState } from 'react-firebase-hooks/auth';

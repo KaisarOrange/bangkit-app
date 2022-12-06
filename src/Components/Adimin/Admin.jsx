@@ -46,10 +46,7 @@ function Admin() {
     }
   };
 
-  // const banUsers = userData?.filter((e) => e.isBan === 1).map((e) => e.uid);
-
   useEffect(() => {
-    //console.log(banUsers);
     check();
   });
   return (

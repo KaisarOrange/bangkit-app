@@ -8,42 +8,43 @@ import {
   Text,
   FormLabel,
   Avatar,
-} from "@chakra-ui/react";
-import { auth, db, storage } from "../../firebase-config";
+  InputLeftAddon,
+} from '@chakra-ui/react';
+import { auth, db, storage } from '../../firebase-config';
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
-} from "firebase/storage";
-import React, { useState } from "react";
-import { useEffect } from "react";
+} from 'firebase/storage';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
 
 function Auth({ formData, setFormData }) {
   const [file, setFile] = useState();
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     const uploadFile = () => {
       const name = new Date().getTime() + file.name;
       console.log(name);
-      const storageRef = ref(storage, "profile/" + file.name);
+      const storageRef = ref(storage, 'profile/' + file.name);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
-        "state_changed",
+        'state_changed',
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setUploadProgress(Math.trunc(progress));
-          console.log("Upload is " + progress + "% done");
+          console.log('Upload is ' + progress + '% done');
           switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
+            case 'paused':
+              console.log('Upload is paused');
               break;
-            case "running":
-              console.log("Upload is running");
+            case 'running':
+              console.log('Upload is running');
               break;
             default:
               break;
@@ -52,16 +53,16 @@ function Auth({ formData, setFormData }) {
         (error) => {
           console.log(error);
           switch (error.code) {
-            case "storage/unauthorized":
+            case 'storage/unauthorized':
               // User doesn't have permission to access the object
               break;
-            case "storage/canceled":
+            case 'storage/canceled':
               // User canceled the upload
               break;
 
             // ...
 
-            case "storage/unknown":
+            case 'storage/unknown':
               // Unknown error occurred, inspect error.serverResponse
               break;
             default:
@@ -81,6 +82,32 @@ function Auth({ formData, setFormData }) {
   return (
     <Box>
       <Stack mb={10}>
+        <Text textAlign='center' fontWeight='bold'>
+          Pilih foto profil-mu!
+        </Text>
+        <FormLabel textAlign='center' cursor='pointer'>
+          <Box m={3} border={2} borderColor='black'>
+            <Avatar size='lg' src={formData.imageUrl} />
+          </Box>
+          <FormControl isRequired>
+            <InputGroup>
+              <Input
+                display='none'
+                type='file'
+                id='file'
+                onChange={(event) => {
+                  setFile(event.target.files[0]);
+                }}
+                placeholder='Deskripsi UMKM'
+                size='sm'
+                bg='transparent'
+              />
+            </InputGroup>
+          </FormControl>
+        </FormLabel>
+        <Box>
+          <Box rounded='md' bg='#14BBC6' w={uploadProgress + '%'} h={1.5}></Box>
+        </Box>
         <FormControl isRequired>
           <InputGroup>
             <Input
@@ -88,9 +115,9 @@ function Auth({ formData, setFormData }) {
               onChange={(event) =>
                 setFormData({ ...formData, email: event.target.value })
               }
-              placeholder="Email"
-              type="email"
-              bg="white"
+              placeholder='Email'
+              type='email'
+              bg='white'
             />
           </InputGroup>
         </FormControl>
@@ -101,53 +128,41 @@ function Auth({ formData, setFormData }) {
               onChange={(event) =>
                 setFormData({ ...formData, password: event.target.value })
               }
-              placeholder="Password"
-              type="password"
-              bg="white"
+              placeholder='Password'
+              type='password'
+              bg='white'
             />
           </InputGroup>
         </FormControl>
         <Spacer />
         <Spacer />
         <FormControl isRequired>
-          <InputGroup mb={7}>
+          <InputGroup>
             <Input
               onChange={(event) =>
                 setFormData({ ...formData, name: event.target.value })
               }
               value={formData.name}
-              placeholder="Nama"
-              type="text"
-              bg="white"
+              placeholder='Nama'
+              type='text'
+              bg='white'
             />
           </InputGroup>
         </FormControl>
-        <Text textAlign="center" fontWeight="bold">
-          Pilih foto profil-mu!
-        </Text>
-        <FormLabel textAlign="center" cursor="pointer">
-          <Box m={3} border={2} borderColor="black">
-            <Avatar size="lg" src={formData.imageUrl} />
-          </Box>
-          <FormControl isRequired>
-            <InputGroup>
-              <Input
-                display="none"
-                type="file"
-                id="file"
-                onChange={(event) => {
-                  setFile(event.target.files[0]);
-                }}
-                placeholder="Deskripsi UMKM"
-                size="sm"
-                bg="transparent"
-              />
-            </InputGroup>
-          </FormControl>
-        </FormLabel>
-        <Box>
-          <Box rounded="md" bg="#14BBC6" w={uploadProgress + "%"} h={1.5}></Box>
-        </Box>
+        <FormControl isRequired>
+          <InputGroup mb={0}>
+            <InputLeftAddon children='+62' />
+            <Input
+              onChange={(event) =>
+                setFormData({ ...formData, phone: event.target.valueAsNumber })
+              }
+              value={formData.phone}
+              placeholder='Nomor Telepon'
+              type='number'
+              bg='white'
+            />
+          </InputGroup>
+        </FormControl>
       </Stack>
     </Box>
   );

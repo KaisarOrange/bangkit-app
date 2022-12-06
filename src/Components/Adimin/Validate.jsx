@@ -64,10 +64,7 @@ function Validate() {
         <Table variant='simple' color='black' key={uniqid()}>
           <Thead key={uniqid()}>
             <Tr key={uniqid()}>
-              <Th>Nama reported UMKM </Th>
-              <Th>Pemilik </Th>
-              <Th>Dilapor oleh</Th>
-              <Th>Kasus</Th>
+              <Th>Nama UMKM </Th>
               <Th></Th>
             </Tr>
           </Thead>

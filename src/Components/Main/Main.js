@@ -1,4 +1,11 @@
-import { Box, Button, Spinner, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Spinner,
+  Image,
+  Alert,
+  AlertIcon,
+} from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useState, useEffect } from 'react';
@@ -27,7 +34,12 @@ function Main() {
     }
   };
 
-  const { data, isLoading, status, isFetching } = useQuery(['umkm'], fetchUMKM);
+  const {
+    data: umkm,
+    isLoading,
+    status,
+    isFetching,
+  } = useQuery(['umkm'], fetchUMKM);
 
   const {
     data: userData,

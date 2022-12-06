@@ -5,9 +5,11 @@ import {
   FormHelperText,
   FormLabel,
   Input,
-} from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import RadioCard from "./Radio";
+  Text,
+} from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import RadioCard from './Radio';
+import uniqid from 'uniqid';
 
 function Finance({ setUmkm, umkm }) {
   const [data, setData] = useState({
@@ -43,37 +45,39 @@ function Finance({ setUmkm, umkm }) {
   };
 
   useEffect(() => {
+    console.log(finance);
     setUmkm({ ...umkm, finance: finance });
   }, [finance]);
   return (
-    <Box display="flex" flexDirection="column" gap={2}>
+    <Box display='flex' flexDirection='column' gap={1}>
       <FormControl>
         <FormLabel>Tahun</FormLabel>
         <Input
           onChange={(e) => setData({ ...data, year: Number(e.target.value) })}
-          bg="white"
-          type="number"
-          min="1900"
-          max="2099"
+          bg='white'
+          type='number'
+          min='1900'
+          max='2099'
         />
       </FormControl>
       <FormControl>
         <FormLabel>Omset</FormLabel>
         <Input
           onChange={(e) => setData({ ...data, omset: Number(e.target.value) })}
-          bg="white"
-          type="number"
+          bg='white'
+          type='number'
         />
       </FormControl>
       <FormControl>
         <FormLabel>Beban Pengeluaran</FormLabel>
         <Input
           onChange={(e) => setData({ ...data, beban: Number(e.target.value) })}
-          bg="white"
-          type="number"
+          bg='white'
+          type='number'
         />
       </FormControl>
       <Button
+        _hover={{ backgroundColor: 'gray.300' }}
         onClick={() => {
           console.log(data);
           pushFinance(data.year);
@@ -82,6 +86,29 @@ function Finance({ setUmkm, umkm }) {
       >
         Input data
       </Button>
+      <Box
+        mt={4}
+        display='flex'
+        gap={2}
+        justifyContent='center'
+        flexWrap='wrap'
+      >
+        {finance.map((e) => {
+          return (
+            <Text
+              key={uniqid()}
+              onClick={() => {}}
+              bg='gray.300'
+              p={2}
+              px={3}
+              rounded='md'
+              userSelect='none'
+            >
+              {e.year}
+            </Text>
+          );
+        })}
+      </Box>
     </Box>
   );
 }

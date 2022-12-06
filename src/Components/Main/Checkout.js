@@ -143,7 +143,7 @@ function Checkout({ id, refetchUmkm }) {
   return (
     <>
       <Button bg='#14BBC6' mt={4} onClick={onOpen}>
-        Bayar
+        Beri Pinjaman
       </Button>
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

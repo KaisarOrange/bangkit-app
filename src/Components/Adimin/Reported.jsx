@@ -2,6 +2,7 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import {
   Avatar,
   Box,
+  Button,
   Table,
   TableContainer,
   Tbody,
@@ -220,10 +221,12 @@ function Reported({ user }) {
                       })}
                     </Td>
                     <Td key={uniqid()}>
-                      <DeleteIcon
-                        cursor='pointer'
+                      <Button
+                        colorScheme='red'
                         onClick={() => banUser(e.ownerId, 1)}
-                      />
+                      >
+                        Ban
+                      </Button>
                     </Td>
                   </Tr>
                 );
@@ -289,10 +292,12 @@ function Reported({ user }) {
                     </Td>
                     <Td key={uniqid()}>{date.getDate()}</Td>
                     <Td key={uniqid()}>
-                      <DeleteIcon
-                        cursor='pointer'
+                      <Button
+                        colorScheme='red'
                         onClick={() => banUser(e.ownerUid)}
-                      />
+                      >
+                        Ban
+                      </Button>
                     </Td>
                   </Tr>
                 );
@@ -320,9 +325,7 @@ function Reported({ user }) {
         <Table variant='simple' key={uniqid()}>
           <Thead key={uniqid()}>
             <Tr key={uniqid()}>
-              <Th>Nama reported UMKM </Th>
-              <Th>Dilapor oleh</Th>
-              <Th>Kasus</Th>
+              <Th>Akun User yang dimatikan </Th>
               <Th></Th>
             </Tr>
           </Thead>
@@ -345,10 +348,12 @@ function Reported({ user }) {
                       </Box>
                     </Td>
                     <Td key={uniqid()}>
-                      <DeleteIcon
-                        cursor='pointer'
+                      <Button
+                        colorScheme='teal'
                         onClick={() => unBanUser(e.uid)}
-                      />
+                      >
+                        Unban
+                      </Button>
                     </Td>
                   </Tr>
                 );

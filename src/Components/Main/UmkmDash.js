@@ -1,4 +1,13 @@
-import { Avatar, Box, Button, Image, Stack, Text } from '@chakra-ui/react';
+import {
+  Alert,
+  AlertIcon,
+  Avatar,
+  Box,
+  Button,
+  Image,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import {
   addDoc,
   collection,
@@ -176,7 +185,36 @@ function UmkmDash() {
           fontSize='14px'
           fontFamily='helvetica'
         >
-          <Box>
+          <Box display='flex' justifyContent='center'>
+            {umkm?.isValidated === 1 ? (
+              <Alert
+                status='success'
+                transition='ease 0.5s'
+                position='absolute'
+                mt={3}
+                w='14vw'
+                h={10}
+                rounded='md'
+                py={2}
+              >
+                <AlertIcon />
+                UMKM sudah divalidasi
+              </Alert>
+            ) : (
+              <Alert
+                py={7}
+                status='warning'
+                transition='ease 0.5s'
+                position='absolute'
+                mt={3}
+                w='14vw'
+                h={10}
+                rounded='md'
+              >
+                <AlertIcon />
+                UMKM belum divalidasi Admin
+              </Alert>
+            )}
             <Image
               m={0}
               h={{ base: '200px', lg: '400px' }}
@@ -295,7 +333,7 @@ function UmkmDash() {
           Dana yang diterima
         </Text>
         <Text fontSize='2xl' fontWeight='bold' color='teal'>
-          Rp. {converter(umkm?.danaRecieved)}
+          Rp. {converter(umkm?.dana)} / Rp.{converter(umkm?.danaRecieved)}
         </Text>
         <Box bg='white' w='60vh' rounded='md' overflow='hidden'>
           <Box
