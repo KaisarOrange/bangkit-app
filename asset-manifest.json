@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/bangkit-app/static/css/main.25a127b6.css",
-    "main.js": "/bangkit-app/static/js/main.2c225d1b.js",
+    "main.js": "/bangkit-app/static/js/main.3c21e455.js",
     "static/media/ef.png": "/bangkit-app/static/media/ef.10d1f2e6ac151e5b2900.png",
     "static/media/warren.jpg": "/bangkit-app/static/media/warren.c5d9786e418bc7dcf238.jpg",
     "static/media/logo.png": "/bangkit-app/static/media/logo.241142b4326d3ca0af41.png",
     "static/media/umkm.png": "/bangkit-app/static/media/umkm.16df7448db54f52a14d2.png",
     "index.html": "/bangkit-app/index.html",
     "main.25a127b6.css.map": "/bangkit-app/static/css/main.25a127b6.css.map",
-    "main.2c225d1b.js.map": "/bangkit-app/static/js/main.2c225d1b.js.map"
+    "main.3c21e455.js.map": "/bangkit-app/static/js/main.3c21e455.js.map"
   },
   "entrypoints": [
     "static/css/main.25a127b6.css",
-    "static/js/main.2c225d1b.js"
+    "static/js/main.3c21e455.js"
   ]
 }
