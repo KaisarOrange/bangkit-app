@@ -1,5 +1,9 @@
 import {
   Button,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
   Input,
   Modal,
   ModalBody,
@@ -26,7 +30,7 @@ function PayDebtModal({ bayarHutang }) {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Bayar Pinjaman</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Input
@@ -42,11 +46,11 @@ function PayDebtModal({ bayarHutang }) {
             <Button
               colorScheme='blue'
               mr={3}
+              disabled={amountPaid === 0 || isNaN(amountPaid)}
               onClick={() => bayarHutang(amountPaid)}
             >
               bayar
             </Button>
-            <Button variant='ghost'>Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

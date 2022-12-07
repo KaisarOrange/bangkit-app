@@ -166,7 +166,13 @@ function Checkout({ id, refetchUmkm }) {
               </FormControl>
             </ModalBody>
             <ModalFooter>
-              <Button type='submit' colorScheme='blue' mr={3} onClick={onClose}>
+              <Button
+                disabled={invest === 0 || isNaN(invest)}
+                type='submit'
+                colorScheme='blue'
+                mr={3}
+                onClick={onClose}
+              >
                 Invest
               </Button>
             </ModalFooter>
