@@ -20,7 +20,7 @@ function PayDebtModal({ bayarHutang }) {
   return (
     <>
       <Button colorScheme='teal' onClick={onOpen}>
-        Bayar Hutang
+        Bayar Pinjaman
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
