@@ -81,7 +81,7 @@ function Main() {
       return <BanNotif isOpen={true} />;
     }
   }
-  if (isFetching) {
+  if (isLoading) {
     return <Loading />;
   }
 
