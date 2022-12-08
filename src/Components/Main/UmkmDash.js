@@ -68,8 +68,8 @@ function UmkmDash() {
               where('uid', '==', umkm?.investor[i].investorId)
             )
           );
-          const data = doc.docs[0].data();
-          arr.push(data);
+          const datae = doc.docs[0].data();
+          arr.push(datae);
         }
         return arr;
       } catch (err) {
