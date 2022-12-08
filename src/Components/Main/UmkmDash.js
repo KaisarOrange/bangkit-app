@@ -60,7 +60,7 @@ function UmkmDash() {
     async () => {
       try {
         const arr = [];
-
+        console.log(arr);
         for (let i = 0; i < umkm?.investor.length; i++) {
           const doc = await getDocs(
             query(
@@ -68,8 +68,8 @@ function UmkmDash() {
               where('uid', '==', umkm?.investor[i].investorId)
             )
           );
-          const datae = doc.docs[0].data();
-          arr.push(datae);
+
+          arr.push(doc.docs[0].data());
         }
         return arr;
       } catch (err) {

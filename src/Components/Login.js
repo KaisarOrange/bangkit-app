@@ -31,10 +31,10 @@ function Login() {
       // maybe trigger a loading screen
       return;
     }
-    if (user?.uid === 'ARZsztwYV0NjXxaAXMd6Hef8k5Z2') {
+    if (user?.uid === 'Y7MrD3c4KNTFSXDTQEIS06V8ZpC2') {
       navigate('/admin');
     }
-    if (user && user?.uid !== 'ARZsztwYV0NjXxaAXMd6Hef8k5Z2')
+    if (user && user?.uid !== 'Y7MrD3c4KNTFSXDTQEIS06V8ZpC2')
       navigate('/main/card');
   }, [user, loading]);
 

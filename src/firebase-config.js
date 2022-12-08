@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp } from 'firebase/app';
 import {
   GoogleAuthProvider,
   getAuth,
@@ -7,7 +7,7 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signOut,
-} from "firebase/auth";
+} from 'firebase/auth';
 import {
   getFirestore,
   query,
@@ -15,14 +15,14 @@ import {
   collection,
   where,
   addDoc,
-} from "firebase/firestore";
-import { getStorage, ref } from "firebase/storage";
+} from 'firebase/firestore';
+import { getStorage, ref } from 'firebase/storage';
 import {
   Alert,
   AlertIcon,
   AlertTitle,
   AlertDescription,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
 const firebaseConfig = {
   apiKey: `${process.env.REACT_APP_FIREBASE_KEY}`,
@@ -31,6 +31,7 @@ const firebaseConfig = {
   storageBucket: `${process.env.REACT_APP_FIREBASE_STORAGE}`,
   messagingSenderId: `${process.env.REACT_APP_FIREBASE_MESSAGE}`,
   appId: `${process.env.REACT_APP_FIREBASE_APPID}`,
+  measurementId: `${process.env.REACT_APP_FIREBASE_MEASUREMENTID}`,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -41,13 +42,13 @@ const signInWithGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
     const user = res.user;
-    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const q = query(collection(db, 'users'), where('uid', '==', user.uid));
     const docs = await getDocs(q);
     if (docs.docs.length === 0) {
-      await addDoc(collection(db, "users"), {
+      await addDoc(collection(db, 'users'), {
         uid: user.uid,
         name: user.displayName,
-        authProvider: "google",
+        authProvider: 'google',
         email: user.email,
       });
     }
@@ -76,7 +77,7 @@ const registerWithEmailAndPassword = async (
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
-    await addDoc(collection(db, "users"), {
+    await addDoc(collection(db, 'users'), {
       uid: user.uid,
       name,
       email,
@@ -92,7 +93,7 @@ const registerWithEmailAndPassword = async (
 const sendPasswordReset = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email);
-    alert("Password reset link sent!");
+    alert('Password reset link sent!');
   } catch (err) {
     console.error(err);
     alert(err.message);

@@ -39,7 +39,7 @@ function Admin() {
   const [page, setPage] = useState(1);
 
   const check = () => {
-    if (user?.uid !== 'ARZsztwYV0NjXxaAXMd6Hef8k5Z2') {
+    if (user?.uid !== 'Y7MrD3c4KNTFSXDTQEIS06V8ZpC2') {
       navigate('/login');
     } else {
       return;

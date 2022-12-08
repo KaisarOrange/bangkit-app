@@ -29,7 +29,6 @@ const updateJatuhTempo = async (umkm, refetch, dDay, paymentDate) => {
         date: setNextPaymentDate(),
       });
     }
-    refetch();
   } else {
     // console.log('fail or either you paid');
   }
