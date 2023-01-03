@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Stack,
-  Text,
-  Image,
-  Fade,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Button, Stack, Text, Image } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../../firebase-config';
@@ -14,18 +6,11 @@ import logo from '../../img/logo.png';
 import Side from './Side';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import {
-  getFirestore,
-  query,
-  getDocs,
-  collection,
-  where,
-  addDoc,
-} from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
 import Auth from './Auth';
 
 function Daftar() {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const [page, setPage] = useState(0);
   const [formData, setFormData] = useState({
     email: '',

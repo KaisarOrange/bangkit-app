@@ -1,8 +1,5 @@
 import {
   Input,
-  Box,
-  Stack,
-  Image,
   FormControl,
   InputGroup,
   Button,
@@ -14,6 +11,8 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  NumberInput,
+  NumberInputField,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import {
@@ -28,12 +27,14 @@ import {
 import { auth, db } from '../../firebase-config';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 function Checkout({ id, refetchUmkm }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
   const [user] = useAuthState(auth);
   const [invest, setInvest] = useState(0);
+  const isError = invest < 0;
   const { data } = useQuery(['check'], async () => {
     const ref = doc(db, 'umkm', id);
     try {
@@ -125,10 +126,18 @@ function Checkout({ id, refetchUmkm }) {
   const checkOut = async (event) => {
     event.preventDefault();
 
+    const danaInvested = () => {
+      if (data.danaRecieved + invest >= data.dana) {
+        return data.danaRecieved + (data.dana - data.danaRecieved);
+      } else {
+        return data.danaRecieved + invest;
+      }
+    };
+
     const umkmDoc = doc(db, 'umkm', id);
     const userDoc = doc(db, 'users', userDataId);
     const newField = {
-      danaRecieved: data.danaRecieved + invest,
+      danaRecieved: danaInvested(),
       investor: pushInvestor(),
     };
     const newUserField = {
@@ -139,7 +148,9 @@ function Checkout({ id, refetchUmkm }) {
     window.location.reload();
     //refetchUmkm();
   };
-
+  useEffect(() => {
+    console.log(typeof invest);
+  }, [invest]);
   return (
     <>
       <Button bg='#14BBC6' mt={4} onClick={onOpen}>
@@ -153,16 +164,13 @@ function Checkout({ id, refetchUmkm }) {
           <form onSubmit={checkOut}>
             <ModalBody>
               <FormControl isRequired>
-                <InputGroup>
-                  <Input
-                    type='number'
-                    placeholder='Dana'
-                    bg='white'
-                    onChange={(event) => {
-                      setInvest(event.target.valueAsNumber);
-                    }}
-                  ></Input>
-                </InputGroup>
+                <NumberInput
+                  onChange={(event) => {
+                    setInvest(parseInt(event));
+                  }}
+                >
+                  <NumberInputField placeholder='Dana' bg='white' />
+                </NumberInput>
               </FormControl>
             </ModalBody>
             <ModalFooter>

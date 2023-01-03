@@ -1,9 +1,8 @@
-import { Avatar, Box, Button, Image, Text } from '@chakra-ui/react';
+import { Avatar, Box, Image, Text } from '@chakra-ui/react';
 import React from 'react';
 import uniqid from 'uniqid';
 import { useOutletContext } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import Cardd from '../../styles/Card.css';
 import { useQuery } from '@tanstack/react-query';
 import convert from './fun/converter';
 
@@ -34,7 +33,7 @@ function Card(props) {
       {data
         ?.filter((e) => e.isValidated !== 0)
         .filter((e) => {
-          if (filterUmkm == '') {
+          if (filterUmkm === '') {
             return e;
           } else if (e.nama.toLowerCase().includes(filterUmkm.toLowerCase())) {
             return e;

@@ -12,6 +12,8 @@ import Portofolio from './Components/Main/Portofolio';
 import UmkmDash from './Components/Main/UmkmDash';
 import Admin from './Components/Adimin/Admin';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Helmet } from 'react-helmet';
+import { useEffect } from 'react';
 
 function App() {
   const client = new QueryClient({
@@ -21,6 +23,9 @@ function App() {
       },
     },
   });
+  useEffect(() => {
+    document.title = 'Bangkit';
+  }, []);
   return (
     <QueryClientProvider client={client}>
       <Router>

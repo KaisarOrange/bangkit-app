@@ -53,10 +53,6 @@ function About() {
     { enabled: Boolean(user) }
   );
 
-  if (isFetching) {
-    return <Loading />;
-  }
-
   return (
     <Box
       m='auto'
@@ -139,7 +135,7 @@ function About() {
         <Checkout refetchUmkm={refetchUmkm} id={id} />
       </Box>
       <Box w={{ base: '80vw', lg: '100vh' }}>
-        <InfoTab umkm={data} />
+        <InfoTab umkm={data || ''} />
       </Box>
     </Box>
   );

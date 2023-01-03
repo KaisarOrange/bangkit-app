@@ -1,29 +1,17 @@
+import { Alert, AlertIcon, Box, Image, Stack, Text } from '@chakra-ui/react';
 import {
-  Alert,
-  AlertIcon,
-  Avatar,
-  Box,
-  Button,
-  Image,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
-import {
-  addDoc,
   collection,
   doc,
-  getDoc,
   getDocs,
   query,
   updateDoc,
   where,
 } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase-config';
 import UpdateModal from './UpdateModal';
 import { useQuery } from '@tanstack/react-query';
-import Loading from './Loading';
 import AlertDialogExample from './Dialogue';
 import converter from './fun/converter';
 import month from './getMonth';
