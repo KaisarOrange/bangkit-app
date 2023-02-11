@@ -1,31 +1,9 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  FormControl,
-  Input,
-  InputGroup,
-  Stack,
-  Text,
-  Image,
-  Textarea,
-} from '@chakra-ui/react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Box, Button, Stack, Text, Image } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  auth,
-  db,
-  logInWithEmailAndPassword,
-  storage,
-} from '../../firebase-config';
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  connectStorageEmulator,
-} from 'firebase/storage';
+import { auth, db, storage } from '../../firebase-config';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import logo from '../../img/logo.png';
 import {
@@ -34,11 +12,9 @@ import {
   getDocs,
   where,
   doc,
-  setDoc,
   addDoc,
   updateDoc,
 } from 'firebase/firestore';
-import { DuitData } from '../Main/Data';
 import Finance from './Finance';
 import InfoUmkm from './InfoUmkm';
 import Aset from './Aset';

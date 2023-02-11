@@ -11,12 +11,11 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import { PhoneIcon, AddIcon, WarningIcon, DeleteIcon } from '@chakra-ui/icons';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, db, logout } from '../../firebase-config';
+import { auth, db, logout } from '../../../firebase-config';
 import { useQuery } from '@tanstack/react-query';
-import converter from './fun/converter';
+import converter from '../fun/converter';
 import {
   collection,
   doc,
@@ -26,8 +25,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { async } from '@firebase/util';
-import Loading from './Loading';
+import Loading from '../Loading';
 
 function Portofolio() {
   const navigate = useNavigate();

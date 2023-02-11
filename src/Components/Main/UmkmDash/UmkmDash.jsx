@@ -9,13 +9,13 @@ import {
 } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, db } from '../../firebase-config';
+import { auth, db } from '../../../firebase-config';
 import UpdateModal from './UpdateModal';
 import { useQuery } from '@tanstack/react-query';
-import AlertDialogExample from './Dialogue';
-import converter from './fun/converter';
-import month from './getMonth';
-import updateJatuhTempo from './fun/updateJatuhTempo';
+import AlertDialogExample from '../beranda menu/Dialogue';
+import converter from '../fun/converter';
+import month from '../fun/getMonth';
+import updateJatuhTempo from '../fun/updateJatuhTempo';
 import PayDebtModal from './PayDebtModal';
 
 function UmkmDash() {

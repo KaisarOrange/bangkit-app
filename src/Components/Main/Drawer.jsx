@@ -7,15 +7,14 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Button,
-  Input,
   Avatar,
   Box,
-} from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+} from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { logout, db, auth } from "../../firebase-config";
+import { logout } from '../../firebase-config';
 
 function DrawerExample(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,42 +23,42 @@ function DrawerExample(props) {
   const navigate = useNavigate();
   const signOut = () => {
     logout();
-    navigate("/");
+    navigate('/');
   };
 
   return (
     <Box>
-      <Avatar cursor="pointer" onClick={onOpen} size="lg" src={props.image} />
+      <Avatar cursor='pointer' onClick={onOpen} size='lg' src={props.image} />
       <Drawer
         isOpen={isOpen}
-        placement="right"
+        placement='right'
         onClose={onClose}
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <DrawerContent rounded="md" mt={130} mr={2} h={200}>
+        <DrawerContent rounded='md' mt={130} mr={2} h={200}>
           <DrawerCloseButton />
           <DrawerHeader>Account</DrawerHeader>
 
           <DrawerBody>
             <Button
               onClick={() => {
-                navigate("/main/portofolio");
+                navigate('/main/portofolio');
                 onClose();
               }}
-              bg="transparent"
-              fontWeight="bold"
-              color="gray.500"
+              bg='transparent'
+              fontWeight='bold'
+              color='gray.500'
             >
               Portofolio
             </Button>
           </DrawerBody>
 
-          <DrawerFooter display="flex" gap={1} alignItems="center">
-            <Button fontSize="0.9rem" px={2} bg="gray.300">
+          <DrawerFooter display='flex' gap={1} alignItems='center'>
+            <Button fontSize='0.9rem' px={2} bg='gray.300'>
               UMKM
             </Button>
-            <Button fontSize="0.9rem" px={2} bg="#14BBC6" onClick={signOut}>
+            <Button fontSize='0.9rem' px={2} bg='#14BBC6' onClick={signOut}>
               Keluar akun
             </Button>
           </DrawerFooter>

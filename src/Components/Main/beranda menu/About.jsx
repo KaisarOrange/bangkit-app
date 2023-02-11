@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Avatar, Box, Button, Image, Text } from '@chakra-ui/react';
+import React from 'react';
+import { Avatar, Box, Image, Text } from '@chakra-ui/react';
 import {
   doc,
   getDoc,
@@ -8,15 +8,15 @@ import {
   collection,
   getDocs,
 } from 'firebase/firestore';
-import { auth, db, storage } from '../../firebase-config';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { auth, db } from '../../../firebase-config';
+import { useParams } from 'react-router-dom';
 
 import Checkout from './Checkout';
 import { useQuery } from '@tanstack/react-query';
 
-import InfoTab from './InfoTab';
-import converter from './fun/converter';
-import Loading from './Loading';
+import InfoTab from '../fun/InfoTab';
+import converter from '../fun/converter';
+
 import ReportModal from './ReportModal';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
@@ -25,9 +25,8 @@ function About() {
   const [user] = useAuthState(auth);
   const {
     data,
-    isLoading,
+
     refetch: refetchUmkm,
-    isFetching,
   } = useQuery(['about'], async () => {
     const ref = doc(db, 'umkm', id);
     try {
@@ -38,7 +37,7 @@ function About() {
       console.log(err);
     }
   });
-  const { data: userData, isLoading: LoadUserData } = useQuery(
+  const { data: userData } = useQuery(
     ['userDataAbout'],
     async () => {
       try {

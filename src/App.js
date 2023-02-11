@@ -1,18 +1,19 @@
-import { HashRouter as Router, Link, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Components/Login';
 import Home from './Components/Home';
 import Main from './Components/Main/Main';
 import AddUmkm from './Components/addUmkm/AddUmkm';
-import About from './Components/Main/About';
-import Checkout from './Components/Main/Checkout';
-import Card from './Components/Main/Card';
+
+import About from './Components/Main/beranda menu/About';
+import Checkout from './Components/Main/beranda menu/Checkout';
+import Card from './Components/Main/beranda menu/Card';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Daftar from './Components/Register/Daftar';
-import Portofolio from './Components/Main/Portofolio';
-import UmkmDash from './Components/Main/UmkmDash';
+import Portofolio from './Components/Main/portofolio/Portofolio';
+import UmkmDash from './Components/Main/UmkmDash/UmkmDash';
 import Admin from './Components/Adimin/Admin';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Helmet } from 'react-helmet';
+
 import { useEffect } from 'react';
 
 function App() {

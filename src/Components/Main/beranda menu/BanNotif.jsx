@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import React from 'react';
-import { logout } from '../../firebase-config';
+import { logout } from '../../../firebase-config';
 
 function BanNotif({ isOpen: open }) {
   const { isOpen, onOpen, onClose } = useDisclosure();

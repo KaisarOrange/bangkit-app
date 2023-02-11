@@ -1,7 +1,5 @@
 import {
-  Input,
   FormControl,
-  InputGroup,
   Button,
   useDisclosure,
   Modal,
@@ -24,7 +22,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { auth, db } from '../../firebase-config';
+import { auth, db } from '../../../firebase-config';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
@@ -34,7 +32,7 @@ function Checkout({ id, refetchUmkm }) {
   const finalRef = React.useRef(null);
   const [user] = useAuthState(auth);
   const [invest, setInvest] = useState(0);
-  const isError = invest < 0;
+
   const { data } = useQuery(['check'], async () => {
     const ref = doc(db, 'umkm', id);
     try {

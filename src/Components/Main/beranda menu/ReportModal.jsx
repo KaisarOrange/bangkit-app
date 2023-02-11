@@ -1,5 +1,4 @@
 import {
-  background,
   Box,
   Button,
   Modal,
@@ -12,10 +11,10 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
-import { useEffect } from 'react';
+import { addDoc, collection } from 'firebase/firestore';
+
 import { useState } from 'react';
-import { db } from '../../firebase-config';
+import { db } from '../../../firebase-config';
 
 function ReportModal({ user, umkm }) {
   const { isOpen, onOpen, onClose } = useDisclosure();

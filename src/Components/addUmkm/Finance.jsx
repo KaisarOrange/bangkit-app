@@ -2,13 +2,12 @@ import {
   Box,
   Button,
   FormControl,
-  FormHelperText,
   FormLabel,
   Input,
   Text,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import RadioCard from './Radio';
+
 import uniqid from 'uniqid';
 
 function Finance({ setUmkm, umkm }) {

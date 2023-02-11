@@ -1,21 +1,13 @@
-import {
-  Box,
-  Button,
-  Spinner,
-  Image,
-  Alert,
-  AlertIcon,
-} from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { getDownloadURL, ref } from 'firebase/storage';
-import { db, auth, storage, logout } from '../../firebase-config';
+import { db, auth } from '../../firebase-config';
 import { query, collection, getDocs, where } from 'firebase/firestore';
-import Navbar from './Navbar';
+import Navbar from './Navbar/Navbar';
 import Loading from './Loading';
-import BanNotif from './BanNotif';
+import BanNotif from './beranda menu/BanNotif';
 
 function Main() {
   const navigate = useNavigate();
@@ -34,18 +26,12 @@ function Main() {
     }
   };
 
-  const {
-    data: umkm,
-    isLoading,
-    status,
-    isFetching,
-  } = useQuery(['umkm'], fetchUMKM);
+  const { isLoading } = useQuery(['umkm'], fetchUMKM);
 
   const {
     data: userData,
     refetch,
     isSuccess,
-    isFetched,
   } = useQuery(
     ['userDataNav'],
     async () => {

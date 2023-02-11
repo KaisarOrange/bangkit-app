@@ -1,4 +1,4 @@
-import { db, auth } from '../../firebase-config';
+import { db, auth } from '../../../firebase-config';
 import { query, collection, getDocs, where } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -9,10 +9,8 @@ import {
   Input,
   Text,
   Avatar,
-  Alert,
-  AlertIcon,
 } from '@chakra-ui/react';
-import logo from '../../img/logo.png';
+import logo from '../../../img/logo.png';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useQuery } from '@tanstack/react-query';
 

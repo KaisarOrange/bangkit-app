@@ -16,21 +16,21 @@ import {
   ModalOverlay,
   Textarea,
   useDisclosure,
-} from "@chakra-ui/react";
-import { doc, updateDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { useEffect, useState } from "react";
-import { db, storage } from "../../firebase-config";
-import camera from "../../img/camera.png";
+} from '@chakra-ui/react';
+import { doc, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useEffect, useState } from 'react';
+import { db, storage } from '../../../firebase-config';
+import camera from '../../../img/camera.png';
 
 function UpdateModal({ id, refetch }) {
-  const [file, setFile] = useState("");
-  const [umkmImage, setUmkmImage] = useState("");
-  const [deskripsi, setDeskripsi] = useState("");
+  const [file, setFile] = useState('');
+  const [umkmImage, setUmkmImage] = useState('');
+  const [deskripsi, setDeskripsi] = useState('');
 
   function updateUmkm() {
     console.log(id);
-    updateDoc(doc(db, "umkm", id), {
+    updateDoc(doc(db, 'umkm', id), {
       deskripsi: deskripsi,
       imageUrl: umkmImage,
     });
@@ -42,21 +42,21 @@ function UpdateModal({ id, refetch }) {
     const uploadFile = () => {
       const name = new Date().getTime() + file.name;
       console.log(name);
-      const storageRef = ref(storage, "umkm/" + file.name);
+      const storageRef = ref(storage, 'umkm/' + file.name);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
-        "state_changed",
+        'state_changed',
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
+          console.log('Upload is ' + progress + '% done');
           switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
+            case 'paused':
+              console.log('Upload is paused');
               break;
-            case "running":
-              console.log("Upload is running");
+            case 'running':
+              console.log('Upload is running');
               break;
             default:
               break;
@@ -65,16 +65,16 @@ function UpdateModal({ id, refetch }) {
         (error) => {
           console.log(error);
           switch (error.code) {
-            case "storage/unauthorized":
+            case 'storage/unauthorized':
               // User doesn't have permission to access the object
               break;
-            case "storage/canceled":
+            case 'storage/canceled':
               // User canceled the upload
               break;
 
             // ...
 
-            case "storage/unknown":
+            case 'storage/unknown':
               // Unknown error occurred, inspect error.serverResponse
               break;
             default:
@@ -93,8 +93,8 @@ function UpdateModal({ id, refetch }) {
     file && uploadFile();
   }, [file]);
   return (
-    <Box w="30vh" textAlign="center" m="auto" mb={5}>
-      <Button colorScheme="teal" onClick={onOpen} pr={10} pl={10}>
+    <Box w='30vh' textAlign='center' m='auto' mb={5}>
+      <Button colorScheme='teal' onClick={onOpen} pr={10} pl={10}>
         Ubah
       </Button>
 
@@ -102,36 +102,36 @@ function UpdateModal({ id, refetch }) {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Mengubah Informasi UMKM</ModalHeader>
-          <FormLabel textAlign="center" cursor="pointer">
+          <FormLabel textAlign='center' cursor='pointer'>
             <Box
-              h="30vh"
-              overflow="hidden"
+              h='30vh'
+              overflow='hidden'
               m={3}
-              border="1px"
-              rounded="md"
-              borderColor="black"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
+              border='1px'
+              rounded='md'
+              borderColor='black'
+              display='flex'
+              justifyContent='center'
+              alignItems='center'
             >
               {file ? (
                 <Image src={umkmImage} />
               ) : (
-                <Image w="10vh" h="10vh" src={camera} />
+                <Image w='10vh' h='10vh' src={camera} />
               )}
             </Box>
             <FormControl>
               <InputGroup>
                 <Input
-                  display="none"
-                  type="file"
-                  id="file"
+                  display='none'
+                  type='file'
+                  id='file'
                   onChange={(event) => {
                     setFile(event.target.files[0]);
                   }}
-                  placeholder="Deskripsi UMKM"
-                  size="sm"
-                  bg="transparent"
+                  placeholder='Deskripsi UMKM'
+                  size='sm'
+                  bg='transparent'
                 />
               </InputGroup>
             </FormControl>
@@ -144,9 +144,9 @@ function UpdateModal({ id, refetch }) {
                 onChange={(event) => {
                   setDeskripsi(event.target.value);
                 }}
-                placeholder="Deskripsi UMKM"
-                size="sm"
-                bg="white"
+                placeholder='Deskripsi UMKM'
+                size='sm'
+                bg='white'
               />
             </InputGroup>
           </FormControl>
@@ -155,7 +155,7 @@ function UpdateModal({ id, refetch }) {
 
           <ModalFooter>
             <Button
-              colorScheme="blue"
+              colorScheme='blue'
               mr={3}
               onClick={() => {
                 updateUmkm();

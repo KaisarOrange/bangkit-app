@@ -8,10 +8,9 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react';
-import { doc, updateDoc } from 'firebase/firestore';
+
 import React from 'react';
 import { useEffect } from 'react';
-import { db } from '../../firebase-config';
 
 function AlertDialogExample({
   BtnText,

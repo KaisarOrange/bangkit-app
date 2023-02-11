@@ -4,9 +4,9 @@ import uniqid from 'uniqid';
 import { useOutletContext } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import convert from './fun/converter';
+import convert from '../fun/converter';
 
-function Card(props) {
+function Card() {
   let navigate = useNavigate();
   const {
     fetchUMKM: [fetchUMKM],
@@ -24,10 +24,10 @@ function Card(props) {
       mt={20}
       ml='auto'
       mr='auto'
-      w={{ base: '30vh', lg: '50vh' }}
+      w={{ base: '20vh', lg: '50vh' }}
       display='grid'
-      gridTemplate={{ base: '1fr 1fr/ auto', lg: 'auto /1fr 1fr 1fr 1fr' }}
-      gap='16'
+      gridTemplate={{ base: '1fr 1fr/ auto', lg: 'auto /1fr 1fr 1fr ' }}
+      gap='12'
       justifyContent='center'
     >
       {data

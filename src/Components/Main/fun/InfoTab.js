@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
 import { Box, Tabs, TabList, TabPanels, TabPanel, Tab } from '@chakra-ui/react';
-import { Bar, Doughnut, Pie } from 'react-chartjs-2';
+import { Bar, Doughnut } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 function InfoTab({ umkm }) {
   return (

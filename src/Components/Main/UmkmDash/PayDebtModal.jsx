@@ -1,9 +1,5 @@
 import {
   Button,
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
   Input,
   Modal,
   ModalBody,
@@ -14,7 +10,6 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
 import { useState } from 'react';
 
 function PayDebtModal({ bayarHutang }) {
